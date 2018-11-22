@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	
+	<!-- Select Member -->
+	<select id="member" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT mem_idx, mem_name
+		FROM member
+	</select>
+	
+	<!-- Search Board List -->
+	<select id="listAll" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT 
+			@rownum := @rownum + 1 AS RNUM, 
+			bf.bf_idx, 
+			bf.bf_title, 
+			mb.mem_name, 
+			bf.reg_date, 
+			bf.mod_date, 
+			bf.view_cnt, 
+			bf.bf_cate_idx, 
+			bf.use_sec, 
+			bf.mem_idx,
+	   		(
+	   			SELECT 
+	   				COUNT(*) 
+	   				FROM board_free_reply
+       				WHERE board_free_reply.bf_idx = bf.bf_idx
+       				AND board_free_reply.use_flag = 'Y'
+       		) AS replyCnt
+			FROM board_free as bf, 
+				 (
+				 	SELECT @rownum := 0
+				 ) AS R
+			JOIN member as mb
+			WHERE bf.use_flag = 'Y'
+			AND bf.mem_idx = mb.mem_idx
+			AND bf.bf_cate_idx = #{bf_cate_idx}
+			ORDER BY bf.bf_idx desc, RNUM desc;
+	</select>
+	
+	<!-- Write -->
+	<insert id="insert">
+		INSERT INTO board_free(bf_title, bf_contents, mem_idx, reg_date, bf_cate_idx, use_sec)
+		VALUES (#{bf_title}, #{bf_contents}, #{mem_idx}, default, #{bf_cate_idx}, #{use_sec});
+	</insert>
+	
+	<!-- Read -->
+	<select id="read" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT * 
+		FROM board_free as bf
+		join member as mb
+		on bf.mem_idx = mb.mem_idx
+		WHERE bf_idx = #{bf_idx};
+	</select>
+	
+	<!-- Delete -->
+	<update id="delete">
+		UPDATE board_free
+		SET use_flag = 'N'
+		WHERE bf_idx = #{bf_idx}; 
+	</update>
+	
+	<!-- Update -->	
+	<update id="update">		
+		UPDATE board_free
+		SET bf_title = #{bf_title}, bf_contents = #{bf_contents}, mod_date = current_timestamp, use_sec = #{use_sec}
+		WHERE bf_idx = #{bf_idx};
+	</update>
+	
+	<update id="viewCnt">
+		UPDATE board_free
+		SET view_cnt = view_cnt + 1
+		WHERE bf_idx = #{bf_idx};
+	</update>
+	
+	<!-- Reply -->
+	<select id="replyList" resultType="kr.co.blockcom.board.vo.BoardVO"> <!-- select를 할때는 result type 반드시!! -->
+		SELECT bfr.bfr_idx, bfr.bfr_contents, bfr.reg_date, bfr.mod_date, mb.mem_name, bfr.mem_idx
+		FROM board_free_reply as bfr
+		JOIN member as mb
+		WHERE bfr.use_flag = 'Y'
+		AND mb.mem_idx = bfr.mem_idx
+		AND bfr.bf_idx = #{bf_idx};
+	</select>
+	
+	<update id="replyUpdate">
+		UPDATE board_free_reply
+		SET bfr_contents = #{bfr_contents}, mod_date = current_timestamp
+		WHERE bfr_idx = #{bfr_idx};
+	</update>
+	
+	<update id="replyDelete">
+		UPDATE board_free_reply
+		SET use_flag = 'N'
+		WHERE bfr_idx = #{bfr_idx};
+	</update>
+	
+	<insert id="replyInsert">
+		INSERT INTO board_free_reply(bf_idx, bfr_contents, mem_idx, reg_date)
+		VALUES (#{bf_idx}, #{bfr_contents}, #{mem_idx}, default);
+	</insert>
+</mapper>
