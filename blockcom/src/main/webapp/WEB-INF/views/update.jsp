@@ -88,11 +88,10 @@
 			</tr>
 			<tr>
 				<td>제목</td> 
-				<td><input type="text" id="bf_title" name="bf_title" size="70" maxlength="250" c:out value="${read.bf_title}" /></td> 
+				<td><input type="text" id="bf_title" name="bf_title" size="65" maxlength="200" c:out value="${read.bf_title}" /></td> 
 			</tr>
 			<tr>
-				<td>내용</td> 
-				<td><textarea id="bf_contents" name="bf_contents" rows="6" cols="60"></textarea></td>
+				<td colspan="2"><textarea id="bf_contents" name="bf_contents" rows="6" cols="60"></textarea></td>
 				<script>
 					CKEDITOR.replace('bf_contents');
 				</script>

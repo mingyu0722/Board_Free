@@ -56,7 +56,24 @@
  		$("#btn_member").click(function(){
 			location.href="/blockcom/member";
 		});
+ 		
+ 		$("#searchBtn").click(function(){
+ 			var searchCondition = $("#searchCondition").val();
+ 			var searchValue = $("#searchValue").val();
+ 			var bf_cate_idx = ${bf_cate_idx};
+ 			
+ 			location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue;
+ 		});
 	});
+	function EnterFunc() {
+		if(event.keyCode == 13) {
+			var searchCondition = $("#searchCondition").val();
+ 			var searchValue = $("#searchValue").val();
+ 			var bf_cate_idx = ${bf_cate_idx};
+	 			
+	 		location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue;
+		}
+	};
 </script>
 </head> 
 <body>
@@ -64,6 +81,18 @@
 	<button type="button" id="btn_free" name="btn_free">자유게시판</button>
 	<button type="button" id="btn_notice" name="btn_notice">공지사항</button>
 	<button type="button" id="btn_member" name="btn_member">회원선택</button>
+	<span class="select" name="searchCondition" style="width:110px; height:40px;">
+		<input name="search_t" type="hidden">
+		<select id="searchCondition" name="searchCondition">
+			<option value="1">제목</option>
+			<option value="2">날짜</option>
+			<option value="3">작성자</option>
+		</select>
+	</span>
+	<span class="input placeholder ml20" style="width:237px; height:40px;">
+		<input type="text" name="searchValue" id="searchValue" class="i_text" onKeyPress="EnterFunc();"/>
+	</span>
+	<button type="button" id="searchBtn" class="btn_m btn_type3 bt_srch">검색</button>
 	<br></br>
 	<table  border="1" id="list" name="list" style="width:800px">
 		<colgroup>
@@ -101,9 +130,9 @@
 				<td style="display:none">${row.mem_idx}</td>
 			</tr>
 		</c:forEach>	
-		</tbody>	
+		</tbody>
 	</table>
-	<c:if test= "${fn:length(list) == 0}"><br>등록된 게시글이 없습니다.<br><br></c:if>	
+	<c:if test= "${fn:length(list) == 0}"><br>등록된 게시글이 없습니다.<br><br></c:if>
 	<button id="btn_write">글쓰기</button>
 	${memIdx}
 </body>

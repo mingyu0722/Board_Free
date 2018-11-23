@@ -52,6 +52,33 @@ $(function(){
 
 //댓글관련 function
 $(function(){	
+	$("#reply_btn").click(function(){
+		if($("#bfr_contents").val()==""){
+			alert("내용을 입력하세요");
+			$("#bfr_contents").focus();
+			return;
+		}
+		
+		var data = {};
+		data["bf_idx"] = ${read.bf_idx};
+		data["bfr_contents"] = $("#bfr_contents").val();
+		data["mem_idx"] = ${mem_idx};
+		$.ajax({
+			type : "POST",
+			url : "/blockcom/replyInsert",
+			data : data,
+			success : function(response){
+				if(response == "true") {
+					alert("댓글이 등록되었습니다.");
+					location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
+				}
+			},
+			error : function(){
+				console.log('error');
+			}
+		});
+	});
+	
 	$(".modify_btn").click(function(){
 		var bfr_idx = $(this).val();
 		var mem_idx = ${mem_idx};
@@ -117,33 +144,6 @@ $(function(){
 				}
 			});
 		}
-	});
-	
-	$("#reply_btn").click(function(){
-		if($("#bfr_contents").val()==""){
-			alert("내용을 입력하세요");
-			$("#bfr_contents").focus();
-			return;
-		}
-		
-		var data = {};
-		data["bf_idx"] = ${read.bf_idx};
-		data["bfr_contents"] = $("#bfr_contents").val();
-		data["mem_idx"] = ${mem_idx};
-		$.ajax({
-			type : "POST",
-			url : "/blockcom/replyInsert",
-			data : data,
-			success : function(response){
-				if(response == "true") {
-					alert("댓글이 등록되었습니다.");
-					location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
-				}
-			},
-			error : function(){
-				console.log('error');
-			}
-		});
 	});
 });
 </script>
