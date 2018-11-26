@@ -40,6 +40,20 @@ public class BoardDaoImpl implements BoardDao {
 	}
 	
 	@Override
+	public BoardVO preArticle(int bf_idx) throws Exception {
+//		BoardVO vo = new BoardVO();
+//		vo = sessionTemplate.selectOne("board.preArticle", bf_idx);
+//		System.out.println(vo);
+		
+		return sessionTemplate.selectOne("board.preArticle", bf_idx);		
+	}
+	
+	@Override
+	public BoardVO nextArticle(int bf_idx) throws Exception {
+		return sessionTemplate.selectOne("board.nextArticle", bf_idx);
+	}
+	
+	@Override
 	public boolean delete(int bf_idx) throws Exception {
 		if(sessionTemplate.delete("board.delete", bf_idx) > 0)
 			return true;

@@ -61,6 +61,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public BoardVO preArticle(int bf_idx) throws Exception {
+		return boardDao.preArticle(bf_idx);
+	}
+	
+	@Override
+	public BoardVO nextArticle(int bf_idx) throws Exception {
+		return boardDao.nextArticle(bf_idx);
+	}
+	
+	@Override
 	public boolean delete(int bf_idx) throws Exception {
 		if(boardDao.delete(bf_idx) == true)
 			return true;

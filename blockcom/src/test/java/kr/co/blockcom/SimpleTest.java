@@ -1,7 +1,5 @@
 package kr.co.blockcom;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +20,7 @@ public class SimpleTest {
 	@Autowired
 	private BoardService boardService;
 	
-	@Test
+	/*@Test
 	public void listAllTest() throws Exception {
 		BoardVO vo = new BoardVO();
 		vo.setSearchCondition("mem_name");
@@ -34,5 +32,11 @@ public class SimpleTest {
 		if(boardService.searchList(vo) != null)
 			result = true;
 		Assert.assertEquals(true, result);
+	}*/
+	
+	@Test
+	public void preArticleTest() throws Exception {
+		BoardVO vo = boardService.preArticle(17);
+		Assert.assertEquals(14, vo.getBf_idx());
 	}
 }

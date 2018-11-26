@@ -27,7 +27,7 @@
 			var tr = $(this);
 			var td = tr.children();
 			var use_sec = td.eq(7).text();
-			var mem_idx = td.eq(3).text();;
+			var mem_idx = td.eq(3).text();
 			var bf_idx = td.eq(1).text();
 			var data = {};
 			data["mem_idx"] = mem_idx;

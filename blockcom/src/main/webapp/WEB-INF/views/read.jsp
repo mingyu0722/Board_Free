@@ -11,6 +11,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 $(function(){
+	
+	
 	$("#btn_list").click(function(){
 		location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
 	})
@@ -24,30 +26,33 @@ $(function(){
 	});		
 	
 	$("#btn_delete").click(function(){
-		var mem_idx = ${mem_idx};
 		if(confirm("삭제하시겠습니까?")){
-			if(mem_idx != ${read.mem_idx} && mem_idx != 1){
-				alert("삭제 권한이 없습니다.");
-				return;
-			}
-			
-			var bf_idx = ${read.bf_idx};
+			var data = {};
+			data["bf_idx"] = ${read.bf_idx};
+			data["mem_idx"] = ${read.mem_idx};
 			$.ajax({
 				type : "POST",
-				url : "/blockcom/boardread?bf_idx=${read.bf_idx}",
-				data : bf_idx,
+				url : "/blockcom/boardread",
+				data : data,
 				success : function(response){
 					if(response == "true") {
 						alert("게시물이 삭제되었습니다.");
 						location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
 					}
+					else if(response == "Auth") {
+						alert("삭제 권한이 없습니다.");
+						return;
+					}
 				},
-				error : function(){
-					console.log('error');
+				error : function(response){
+					if(response == "false") 
+						console.log('error');
 				}
 			});
 		}
 	});
+	
+	
 });
 
 //댓글관련 function
@@ -119,16 +124,12 @@ $(function(){
 	
 	$(".delete_btn").click(function(){
 		var bfr_idx = $(this).val();
-		var mem_idx = ${mem_idx};
 		var reply_memIdx = $('.mem_idx_'+bfr_idx).val();
-		if(mem_idx != reply_memIdx  && mem_idx != 1) {
-			alert("삭제 권한이 없습니다.");
-			return;
-		}
 		
 		if(confirm("댓글을 삭제 하시겠습니까?")) {
 			var data = {};
-			data["bfr_idx"] = bfr_idx;				
+			data["bfr_idx"] = bfr_idx;
+			data["mem_idx"] = reply_memIdx;
 			$.ajax({
 				type : "POST",
 				url : "/blockcom/replyDelete",
@@ -138,6 +139,10 @@ $(function(){
 						alert("댓글이 삭제되었습니다.");
 						location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
 					}
+					else if(response == "Auth") {
+						alert("삭제 권한이 없습니다.");
+						return;
+					}
 				},
 				error : function(){
 					console.log('error');
@@ -146,6 +151,37 @@ $(function(){
 		}
 	});
 });
+
+function preArticle() {
+	var use_sec = '${preArticle.use_sec}';
+	var memIdx = '${memIdx}';
+	/* if(use_sec == 'Y') {
+		if(memIdx == '${preArticle.mem_idx}')
+			location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";	
+		else
+			alert("(비밀글)읽을 권한이 없습니다.");			
+	} else if(use_sec == 'N') {
+		location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";
+	} */
+	location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";
+};
+
+function nextArticle() {
+	var use_sec = '${nextArticle.use_sec}';
+	var memIdx = '${memIdx}';
+	if(use_sec == 'Y') {
+		if(memIdx == '${nextArticle.mem_idx}') {
+			location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
+		}
+			
+		else {
+			alert("(비밀글)읽을 권한이 없습니다.");
+		}
+			
+	} else if(use_sec == 'N') {
+		location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
+	}
+};
 </script>
 </head>
 <body>
@@ -184,6 +220,32 @@ $(function(){
 	 <button type = "button" id="btn_list">목록</button>
 	 <button type = "button" id="btn_delete">삭제</button>
 	 <button type = "button" id="btn_update">수정</button>
+	 <table border="1" style="width:600px" name="preNextArticle">
+	 		<tr>
+	 			<td>다음글</td>
+	 			<c:set var="use_sec" value="${nextArticle.use_sec}" />
+					<c:if test="${use_sec == 'Y' }"><td><a href="#" onclick="nextArticle(); return false;">(비밀글)${nextArticle.bf_title}</td></c:if>
+					<c:if test="${use_sec == 'N' }"><td><a href="#" onclick="nextArticle(); return false;">${nextArticle.bf_title}</td></c:if>
+	 				<td>작성자: ${nextArticle.mem_name}</td>
+	 				<input type="hidden" id="mem_idx" value="${nextArticle.mem_idx}" /> 							
+	 		</tr>	
+	 		<tr>
+	 			<td>이전글</td>
+	 			<c:set var="preArticle" value="${preArticle}" />
+	 				<c:if test="${preArticle == null}">
+	 					<td>이전글이 없습니다.</td>
+	 				</c:if>
+	 				<c:if test="${preArticle != null}">
+	 					<c:set var="use_sec" value="${preArticle.use_sec}" /> 				
+							<c:if test="${use_sec == 'Y'}"><td><a href="#" onclick="preArticle(); return false;">(비밀글)${preArticle.bf_title}</a></td></c:if>
+							<c:if test="${use_sec == 'N'}"><td><a href="#" onclick="preArticle(); return false;">${preArticle.bf_title}</td></c:if>
+	 						<td>작성자: ${preArticle.mem_name}</td>
+	 				</c:if>
+	 			
+	 		</tr>
+	 		<input type="hidden" id="mem_idx" value="${preArticle.mem_idx}" />
+	 	</table>
+	 	
 	 <br>
 	 <h3>댓글</h3>
 	 	<textarea id="bfr_contents" rows="4" cols="80" placeholder="댓글 입력(최대 300자)"></textarea>

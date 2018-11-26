@@ -19,10 +19,15 @@ public interface BoardService {
 	
 	//Write
 	public boolean write(BoardVO vo) throws Exception;
-
 	
 	//Read
 	public BoardVO read(int bf_idx) throws Exception;
+	
+	//Previous Article
+	public BoardVO preArticle(int bf_idx) throws Exception;
+	
+	//Next Article
+	public BoardVO nextArticle(int bf_idx) throws Exception;
 	
 	//Delete
 	public boolean delete(int bf_idx) throws Exception;

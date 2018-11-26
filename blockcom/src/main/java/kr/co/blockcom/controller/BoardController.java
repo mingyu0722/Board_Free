@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,8 +74,9 @@ public class BoardController {
 	@RequestMapping(value="/boardlist", method=RequestMethod.POST)
 	//use_sec이 'Y'인 경우 게시글의 mem_idx와 현재 세션에 등록된 mem_idx를 비교하여 읽기 권한 판별.(admin mem_idx = 1)
 	public @ResponseBody String readAuth(@RequestBody String mem_idx, HttpSession session) throws Exception {
-		int memIdx = Integer.parseInt(mem_idx.substring(8));
-		if(memIdx == (Integer)session.getAttribute("mem_idx") || (Integer)session.getAttribute("mem_idx") == 1) {
+		int memIdx = Integer.parseInt(mem_idx.substring(8)); 
+		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
+		if(memIdx == (Integer)session.getAttribute("mem_idx") || currentMemeberIdx == 1) {
 			return "true";
 		}	
 		else
@@ -104,28 +104,64 @@ public class BoardController {
 	@RequestMapping(value="/boardread", method=RequestMethod.GET)
 	//bf_idx에 해당하는 글과 댓글을 DB 요청 후 view로 전달. replyList는 해당 idx에 있는 모든 것을 출력하므로 List로 받은 후 List객체를 전달.
 	public ModelAndView view(@RequestParam int bf_idx, HttpSession session) throws Exception {
-		boardService.viewCnt(bf_idx, session);
+		
+		int currentMemeberIdx = (Integer) session.getAttribute("mem_idx");
+		BoardVO vo = boardService.read(bf_idx);
 		ModelAndView mav = new ModelAndView();
 		List<ReplyVO> replyList = boardService.replyList(bf_idx);
-		mav.setViewName("read");
-		mav.addObject("read", boardService.read(bf_idx));
-		mav.addObject("replyList", replyList);
-		return mav;
+		String use_sec = vo.getUse_sec();
+		System.out.println(use_sec);
+		if(use_sec.equals("Y")) {
+			if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
+				mav.setViewName("read");
+				mav.addObject("read", vo);
+				mav.addObject("preArticle", boardService.preArticle(bf_idx));
+				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+				mav.addObject("replyList", replyList);
+				mav.addObject("memIdx", currentMemeberIdx);
+				boardService.viewCnt(bf_idx, session);
+				
+				return mav;
+			}
+			else {
+				mav.setViewName("read");
+				vo.setBf_contents("비밀글입니다.");
+				mav.addObject("read", vo);
+				
+				return mav;
+			}	
+		}
+		
+		else{
+			mav.setViewName("read");
+			mav.addObject("read", vo);
+			mav.addObject("preArticle", boardService.preArticle(bf_idx));
+			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+			mav.addObject("replyList", replyList);
+			mav.addObject("memIdx", currentMemeberIdx);
+			boardService.viewCnt(bf_idx, session);
+			return mav;
+		}
 	}
 	
 	@RequestMapping(value="/boardread", method=RequestMethod.POST)
 	//bf_idx에 해당하는 데이터를 DB에서 삭제 후 성공 시 true 반환 및 게시글 목록으로 이동.
-	public @ResponseBody String delete(@RequestParam int bf_idx) throws Exception {
-		if(boardService.delete(bf_idx) == true)
-			return "true";
+	public @ResponseBody String delete(@ModelAttribute BoardVO vo, HttpSession session) throws Exception {
+		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
+		if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
+			if(boardService.delete(vo.getBf_idx()) == true)
+				return "true";
+			else
+				return "false";
+		}
 		else
-			return "false";
+			return "Auth";
 	}
 	
 	
 	@RequestMapping(value="/boardupdate", method=RequestMethod.POST)
 	//bf_idx를 전달받은 update page이동 후 수정된 내용을 vo 객체에 담아 DB로 전달. update 성공 시 true 반환 및 bf_idx해당 read page로 이동.
-	public @ResponseBody String update(@ModelAttribute BoardVO vo) throws Exception {
+	public @ResponseBody String update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception {
 		if(boardService.update(vo) == true)
 			return "true";
 		else
@@ -160,12 +196,18 @@ public class BoardController {
 	
 	@RequestMapping(value="/replyDelete", method=RequestMethod.POST)
 	//해당 댓글의 bfr_idx, bfr_contents를 DB에 update. 성공 시 true return.
-	public @ResponseBody String replyDelete(@RequestBody String bfr_idx) throws Exception {
-		int bfrIdx = Integer.parseInt(bfr_idx.substring(8));
-		if(boardService.replyDelete(bfrIdx) == true)
-			return "true";
+	public @ResponseBody String replyDelete(@ModelAttribute ReplyVO vo,  HttpSession session) throws Exception {
+		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
+		int bfr_idx = vo.getBfr_idx();
+		System.out.println(currentMemeberIdx+" "+vo.getMem_idx()+" "+vo.getBfr_idx());
+		if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
+			if(boardService.replyDelete(bfr_idx) == true)
+				return "true";
+			else
+				return "false";
+		}
 		else
-			return "false";
+			return "Auth";
 	}
 	
 	/*@PostMapping(value="/board/search")

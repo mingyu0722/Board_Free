@@ -100,6 +100,66 @@
 				bf_idx = #{bf_idx};
 	</select>
 	
+	<select id="preArticle" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT 
+			bf.bf_idx, 
+			bf.bf_title, 
+			bf.use_sec,
+    		mb.mem_name,
+    		bf.mem_idx
+			FROM
+				board_free as bf
+			JOIN
+				member AS mb
+			WHERE
+				bf.bf_idx
+				IN
+					(
+						SELECT 
+							MAX(bf_idx)
+						FROM 
+							board_free
+						WHERE
+							bf_idx <![CDATA[<]]> #{bf_idx}
+						AND
+							use_flag = 'Y'
+					)
+			AND
+				bf.mem_idx = mb.mem_idx
+			AND
+				bf_cate_idx = 1;
+	</select>
+	
+	<select id="nextArticle" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT 
+			bf.bf_idx, 
+			bf.bf_title, 
+			bf.use_sec,
+    		mb.mem_name,
+    		bf.mem_idx
+			FROM
+				board_free as bf
+			JOIN
+				member AS mb
+			WHERE
+				bf.bf_idx
+				IN
+					(
+						SELECT 
+							MIN(bf_idx)
+						FROM 
+							board_free
+						WHERE
+							bf_idx <![CDATA[>]]> #{bf_idx}
+						AND
+							use_flag = 'Y'
+					)
+			AND
+				bf.mem_idx = mb.mem_idx
+			AND
+				bf_cate_idx = 1;
+	</select>
+	
 	<!-- Delete -->
 	<update id="delete">
 		UPDATE 
