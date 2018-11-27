@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.PagingVO;
 
 @Repository
 public interface BoardDao {
@@ -12,9 +13,15 @@ public interface BoardDao {
 	//Select Member
 	public List<BoardVO> member() throws Exception;
 	
+	/*//Recommended List
+	public List<BoardVO> recList(BoardVO vo) throws Exception;*/
+	
+	//Total Count
+	public int totalCount(PagingVO vo) throws Exception;
+	
 	//List
 //	public List<BoardVO> listAll(int bf_cate_idx) throws Exception;
-	public List<BoardVO> listAll(BoardVO vo) throws Exception;
+	public List<PagingVO> listAll(BoardVO vo) throws Exception;
 	
 	//Write	
 	public boolean insert(BoardVO vo);

@@ -91,17 +91,23 @@
 				<td><input type="text" id="bf_title" name="bf_title" size="65" maxlength="200" c:out value="${read.bf_title}" /></td> 
 			</tr>
 			<tr>
-				<td colspan="2"><textarea id="bf_contents" name="bf_contents" rows="6" cols="60"></textarea></td>
-				<script>
-					CKEDITOR.replace('bf_contents');
-				</script>
+				<c:set var="auth" value="${read.bf_contents}" />
+					<tr><c:if test="${auth == '수정할 수 없습니다.'}"><td colspan="2">${read.bf_contents}</td></c:if>
+					<c:if test="${auth != '수정할 수 없습니다.'}">
+						<td colspan="2"><textarea id="bf_contents" name="bf_contents" rows="6" cols="60"></textarea></td>
+						<script>CKEDITOR.replace('bf_contents');</script>
+					</c:if>
 			</tr>
 		</tbody>
 	</table>
 	<input type="hidden" id="bf_idx" name="bf_idx" value="${read.bf_idx}" />	
 </form>
 	 <button type = "button" id="btn_list">목록</button>
-	 <button type = "button" id="btn_save">수정</button>
-	 <button type = "button" id="btn_cancel">취소</button>	 
+	 <c:set var="auth" value="${read.bf_contents}" />
+	 	<c:if test="${auth == '수정할 수 없습니다.'}"></c:if>
+	 	<c:if test="${auth != '수정할 수 없습니다.'}">
+	 		<button type = "button" id="btn_save">수정</button>
+	 		<button type = "button" id="btn_cancel">취소</button>
+	 	</c:if>	 
 </body>
 </html>

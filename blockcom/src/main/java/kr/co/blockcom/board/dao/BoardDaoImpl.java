@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.PageMaker;
+import kr.co.blockcom.board.vo.PagingVO;
 
 @Repository
 public class BoardDaoImpl implements BoardDao {
@@ -20,11 +22,21 @@ public class BoardDaoImpl implements BoardDao {
 	}
 	
 	@Override
-//	public List<BoardVO> listAll(int bf_cate_idx) throws Exception
-	public List<BoardVO> listAll(BoardVO vo) throws Exception {
-		return sessionTemplate.selectList("board.listAll", vo);
+	public int totalCount(PagingVO vo) throws Exception {
+		return sessionTemplate.selectOne("board.totalCount", vo);
 	}
 	
+	/*@Override
+	public List<BoardVO> recList(BoardVO vo) throws Exception {
+		return sessionTemplate.selectList("board.recList", vo);
+	}*/
+	
+	@Override
+	public List<PagingVO> listAll(BoardVO vo) throws Exception {
+		
+		return sessionTemplate.selectList("board.listAll", vo);
+	}
+
 	@Override
 	public boolean insert(BoardVO vo) {		
 		if(sessionTemplate.insert("board.insert", vo) > 0) {

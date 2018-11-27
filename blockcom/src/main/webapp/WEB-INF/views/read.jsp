@@ -17,11 +17,6 @@ $(function(){
 		location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
 	})
 	$("#btn_update").click(function(){
-		var mem_idx = ${mem_idx};
-		if(mem_idx != ${read.mem_idx}  && mem_idx != 1){
-			alert("수정 권한이 없습니다.");
-			return;
-		}
 		location.href="/blockcom/boardupdate?bf_idx=${read.bf_idx}";
 	});		
 	
@@ -38,10 +33,6 @@ $(function(){
 					if(response == "true") {
 						alert("게시물이 삭제되었습니다.");
 						location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
-					}
-					else if(response == "Auth") {
-						alert("삭제 권한이 없습니다.");
-						return;
 					}
 				},
 				error : function(response){
@@ -155,15 +146,14 @@ $(function(){
 function preArticle() {
 	var use_sec = '${preArticle.use_sec}';
 	var memIdx = '${memIdx}';
-	/* if(use_sec == 'Y') {
+	if(use_sec == 'Y') {
 		if(memIdx == '${preArticle.mem_idx}')
 			location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";	
 		else
 			alert("(비밀글)읽을 권한이 없습니다.");			
 	} else if(use_sec == 'N') {
 		location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";
-	} */
-	location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";
+	}
 };
 
 function nextArticle() {
@@ -173,11 +163,9 @@ function nextArticle() {
 		if(memIdx == '${nextArticle.mem_idx}') {
 			location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
 		}
-			
 		else {
 			alert("(비밀글)읽을 권한이 없습니다.");
 		}
-			
 	} else if(use_sec == 'N') {
 		location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
 	}
@@ -186,7 +174,6 @@ function nextArticle() {
 </head>
 <body>
 <h2>게시글 보기</h2>
-<form id="form" method="post" >
 	<table border="1" style="width:600px">
 		<colgroup>
 			<col width='15%' />
@@ -213,37 +200,48 @@ function nextArticle() {
 			</tr>
 		</tbody>
 	</table>
+	
 	<input type="hidden" name="bf_idx" value="${read.bf_idx}">
 	<input type="hidden" name="mem_idx" value="${read.mem_idx}">
 	<input type="hidden" name="bf_cate_idx" value="${read.bf_cate_idx}">
-</form>
-	 <button type = "button" id="btn_list">목록</button>
-	 <button type = "button" id="btn_delete">삭제</button>
-	 <button type = "button" id="btn_update">수정</button>
-	 <table border="1" style="width:600px" name="preNextArticle">
-	 		<tr>
-	 			<td>다음글</td>
-	 			<c:set var="use_sec" value="${nextArticle.use_sec}" />
-					<c:if test="${use_sec == 'Y' }"><td><a href="#" onclick="nextArticle(); return false;">(비밀글)${nextArticle.bf_title}</td></c:if>
-					<c:if test="${use_sec == 'N' }"><td><a href="#" onclick="nextArticle(); return false;">${nextArticle.bf_title}</td></c:if>
-	 				<td>작성자: ${nextArticle.mem_name}</td>
-	 				<input type="hidden" id="mem_idx" value="${nextArticle.mem_idx}" /> 							
+	
+	<button type = "button" id="btn_list">목록</button>
+	<c:set var="memIdx" value="${memIdx}" />
+	<c:set var="mem_idx" value="${read.mem_idx}" />
+		<c:choose>
+			<c:when test="${memIdx eq mem_idx}">
+				<button type = "button" id="btn_delete">삭제</button>	
+				<button type = "button" id="btn_update">수정</button>	
+			</c:when>
+			<c:otherwise></c:otherwise>
+		</c:choose>
+	<table border="1" style="width:600px" name="preNextArticle">
+		<tr>
+			<td>다음글</td>
+	 			<c:set var="nextArticle" value="${nextArticle}" />
+	 				<c:if test="${nextArticle == null}">
+	 						<td colspan="2">다음글이 없습니다.</td>
+	 				</c:if>
+	 				<c:if test="${nextArticle != null}">
+	 					<c:set var="use_sec" value="${nextArticle.use_sec}" />
+							<c:if test="${use_sec == 'Y' }"><td><a href="#" onclick="nextArticle(); return false;">(비밀글)${nextArticle.bf_title}</td></c:if>
+							<c:if test="${use_sec == 'N' }"><td><a href="#" onclick="nextArticle(); return false;">${nextArticle.bf_title}</td></c:if>
+	 						<td>작성자: ${nextArticle.mem_name}</td>
+	 				</c:if>
+	 			<input type="hidden" id="mem_idx" value="${nextArticle.mem_idx}" /> 							
 	 		</tr>	
 	 		<tr>
 	 			<td>이전글</td>
 	 			<c:set var="preArticle" value="${preArticle}" />
-	 				<c:if test="${preArticle == null}">
-	 					<td>이전글이 없습니다.</td>
-	 				</c:if>
+	 				<c:if test="${preArticle == null}"><td colspan="2">이전글이 없습니다.</td></c:if>
 	 				<c:if test="${preArticle != null}">
 	 					<c:set var="use_sec" value="${preArticle.use_sec}" /> 				
 							<c:if test="${use_sec == 'Y'}"><td><a href="#" onclick="preArticle(); return false;">(비밀글)${preArticle.bf_title}</a></td></c:if>
 							<c:if test="${use_sec == 'N'}"><td><a href="#" onclick="preArticle(); return false;">${preArticle.bf_title}</td></c:if>
 	 						<td>작성자: ${preArticle.mem_name}</td>
 	 				</c:if>
-	 			
+	 			<input type="hidden" id="mem_idx" value="${preArticle.mem_idx}" />
 	 		</tr>
-	 		<input type="hidden" id="mem_idx" value="${preArticle.mem_idx}" />
 	 	</table>
 	 	
 	 <br>
@@ -269,11 +267,18 @@ function nextArticle() {
 				</td>
 	 		</tr>
 	 		<tr>
-	 			<td><button class="modify_btn" type="button" value="${replyList.bfr_idx}">수정</button></td>
-	 			<td><button class="delete_btn" type="button" value="${replyList.bfr_idx}">삭제</button></td>
+	 			<c:set var="memIdx" value="${memIdx}" />
+				<c:set var="mem_idx" value="${replyList.mem_idx}" />
+				<c:choose>
+					<c:when test="${memIdx eq mem_idx}">
+						<td><button class="modify_btn" type="button" value="${replyList.bfr_idx}">수정</button></td>
+	 					<td><button class="delete_btn" type="button" value="${replyList.bfr_idx}">삭제</button></td>
+					</c:when>
+					<c:otherwise></c:otherwise>				
+				</c:choose>
 	 		</tr>
 	 		<input type="hidden" class="mem_idx_${replyList.bfr_idx}" value="${replyList.mem_idx}" />
 	 	</table>
-	 	</c:forEach>	 
+	 	</c:forEach>
 </body>
 </html>

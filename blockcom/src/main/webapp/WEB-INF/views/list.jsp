@@ -94,6 +94,7 @@
 	</span>
 	<button type="button" id="searchBtn" class="btn_m btn_type3 bt_srch">검색</button>
 	<br></br>
+	전체 글 : ${totalCount}
 	<table  border="1" id="list" name="list" style="width:800px">
 		<colgroup>
 			<col width='8%' />
@@ -112,9 +113,25 @@
 			</tr>
 		</thead>
 		<tbody>
+		<c:forEach var="row" items="${recList}">
+			<tr>
+				<td><span style="color:blue">추천</span></td>
+				<td style="display:none">${row.bf_idx}</td>
+ 				<c:set var="use_sec" value="${row.use_sec}" /> 				
+				<c:if test="${use_sec == 'Y' }"><td>(비밀글)${row.bf_title} [${row.replyCnt}]</td></c:if>
+				<c:if test="${use_sec == 'N' }"><td>${row.bf_title} [${row.replyCnt}]</td></c:if>
+ 				<td style="display:none">${row.mem_idx}</td>
+				<td>${row.mem_name}</td>
+				<c:set var="date" value="${row.mod_date}" />
+				<c:if test= "${date == null}"><td><fmt:formatDate value="${row.reg_date}" pattern="yyyy-MM-dd" /></td></c:if>
+				<c:if test= "${date != null}"><td><fmt:formatDate value="${row.mod_date}" pattern="yyyy-MM-dd" /></td></c:if>
+				<td>${row.view_cnt}</td>
+				<td style="display:none">${row.use_sec}</td>
+				<td style="display:none">${row.mem_idx}</td>
+			</tr>
+		</c:forEach>
 		<c:forEach var="row" items="${list}">
 			<tr>
-				
 				<td>${row.RNUM} </td>
 				<td style="display:none">${row.bf_idx}</td>
  				<c:set var="use_sec" value="${row.use_sec}" /> 				

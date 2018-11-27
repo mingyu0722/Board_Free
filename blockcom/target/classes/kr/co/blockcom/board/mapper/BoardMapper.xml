@@ -8,6 +8,40 @@
 		FROM member
 	</select>
 	
+	<!-- Total List -->
+	<select id="totalCount" resultType="int">
+		SELECT
+			count(*) AS totalCount
+			FROM
+				board_free AS bf
+			JOIN
+				member AS mb
+			WHERE
+				bf.use_flag = 'Y'
+			AND
+				bf.bf_cate_idx = #{bf_cate_idx}
+			AND
+				bf.mem_idx = mb.mem_idx
+			<if test="searchCondition != null and searchCondition.equals('bf_title')">
+        	AND
+            	(
+                	bf.bf_title LIKE '%${searchValue}%'
+                )
+        	</if>
+        	<if test="searchCondition != null and searchCondition.equals('reg_date')">
+            AND
+                (
+                	bf.reg_date LIKE '%${searchValue}%'
+                )
+        	</if>
+        	<if test="searchCondition != null and searchCondition.equals('mem_name')">
+            AND
+                (
+                	mb.mem_name LIKE '%${searchValue}%'
+                )
+        	</if>
+	</select>
+	
 	<!-- Search Board List -->
 	<select id="listAll" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT 
@@ -41,6 +75,8 @@
 				bf.mem_idx = mb.mem_idx
 			AND 
 				bf.bf_cate_idx = #{bf_cate_idx}
+			<!-- AND
+				bf.rec_cnt = 0		 -->
 			<if test="searchCondition != null and searchCondition.equals('bf_title')">
         	AND
             	(
@@ -60,8 +96,43 @@
                 )
         	</if>	
 			ORDER 
-				BY bf.bf_idx desc, RNUM desc;
+				BY bf.bf_idx desc, RNUM desc
+			LIMIT 
+				#{page}, #{perPageNumber};
 	</select>
+	<!-- <select id="recList" resultType="kr.co.blockcom.board.vo.BoardVO">
+		SELECT
+			bf.bf_idx, 
+			bf.bf_title, 
+			mb.mem_name, 
+			bf.reg_date, 
+			bf.mod_date, 
+			bf.view_cnt, 
+			bf.bf_cate_idx, 
+			bf.use_sec, 
+			bf.mem_idx,
+	   		(
+	   			SELECT 
+	   				COUNT(*) 
+	   				FROM board_free_reply
+       				WHERE board_free_reply.bf_idx = bf.bf_idx
+       				AND board_free_reply.use_flag = 'Y'
+       		) AS replyCnt
+			FROM 
+				board_free as bf
+			JOIN 
+				member as mb
+			WHERE 
+				bf.use_flag = 'Y'
+			AND 
+				bf.mem_idx = mb.mem_idx
+			AND
+				bf.rec_cnt != 0	
+			AND 
+				bf.bf_cate_idx = #{bf_cate_idx}
+			ORDER 
+				BY bf.bf_idx desc;
+	</select> -->
 	
 	<!-- Write -->
 	<insert id="insert">

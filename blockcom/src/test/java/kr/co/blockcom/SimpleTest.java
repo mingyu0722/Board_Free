@@ -1,5 +1,7 @@
 package kr.co.blockcom;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +36,19 @@ public class SimpleTest {
 		Assert.assertEquals(true, result);
 	}*/
 	
-	@Test
+	/*@Test
 	public void preArticleTest() throws Exception {
 		BoardVO vo = boardService.preArticle(17);
 		Assert.assertEquals(14, vo.getBf_idx());
-	}
+	}*/
+	
+	/*@Test
+	public void recListTest() throws Exception {
+		BoardVO vo = new BoardVO();
+		vo.setBf_cate_idx(1);
+		List<BoardVO> recList = boardService.recList(vo);
+		Assert.assertEquals(2, recList.size());
+	}*/
+	
+	
 }

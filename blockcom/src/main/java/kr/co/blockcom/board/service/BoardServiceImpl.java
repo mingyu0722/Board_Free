@@ -13,6 +13,8 @@ import kr.co.blockcom.board.dao.MemberDao;
 import kr.co.blockcom.board.dao.ReplyDao;
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
+import kr.co.blockcom.board.vo.PageMaker;
+import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 
 @Service
@@ -33,7 +35,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public List<BoardVO> listAll(BoardVO vo) throws Exception {
+	public int totalCount(PagingVO vo) throws Exception {
+		return boardDao.totalCount(vo);
+	}
+	
+	/*@Override
+	public List<BoardVO> recList(BoardVO vo) throws Exception {
+		return boardDao.recList(vo);
+	}*/
+	
+	@Override
+	public List<PagingVO> listAll(BoardVO vo) throws Exception {
 		return boardDao.listAll(vo);
 	}
 	

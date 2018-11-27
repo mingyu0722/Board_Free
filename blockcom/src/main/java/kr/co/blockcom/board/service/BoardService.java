@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
+import kr.co.blockcom.board.vo.PageMaker;
+import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 
 public interface BoardService {
@@ -13,9 +15,14 @@ public interface BoardService {
 	//Select Member
 	public List<MemberVO> member() throws Exception;
 	
+	//Total Count
+	public int totalCount(PagingVO vo) throws Exception;
+	
+	/*//Recommended List
+	public List<BoardVO> recList(BoardVO vo) throws Exception;*/
+	
 	//List
-//	public List<BoardVO> listAll(int bf_cate_idx) throws Exception;
-	public List<BoardVO> listAll(BoardVO vo) throws Exception;
+	public List<PagingVO> listAll(BoardVO vo) throws Exception;
 	
 	//Write
 	public boolean write(BoardVO vo) throws Exception;

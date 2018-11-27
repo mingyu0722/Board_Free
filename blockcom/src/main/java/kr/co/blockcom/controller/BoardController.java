@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.co.blockcom.board.service.BoardService;
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
+import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 
 @Controller
@@ -45,29 +46,51 @@ public class BoardController {
 		session.setAttribute("mem_idx", Integer.parseInt(mem_idx));
 		return "Success";
 	}
-	
+		
 	@RequestMapping(value="/boardlist", method=RequestMethod.GET)
 	//DB의 board_free table 데이터를 받아 view에 전달.
-	public ModelAndView list(@RequestParam int bf_cate_idx, @RequestParam(defaultValue="") String searchCondition, @RequestParam(defaultValue="") String searchValue, HttpSession session)
-			throws Exception {
+	public ModelAndView list(@RequestParam int bf_cate_idx, @RequestParam(defaultValue="") String searchCondition, @RequestParam(defaultValue="") String searchValue,
+			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="5") int perPageNumber, @RequestParam(defaultValue="5") int pageNumber, HttpSession session) 
+					throws Exception {
 		if(searchCondition.equals("1"))			//String은 class이므로 비교연산자 == 으로 비교 불가. String.equals() 사용.
 			searchCondition = "bf_title";
 		else if(searchCondition.equals("2"))
 			searchCondition = "reg_date";
 		else if(searchCondition.equals("3"))
 			searchCondition = "mem_name";
-	
-		BoardVO vo = new BoardVO();
-		vo.setBf_cate_idx(bf_cate_idx);
-		vo.setSearchCondition(searchCondition);
-		vo.setSearchValue(searchValue);
-		List<BoardVO> list = boardService.listAll(vo);
 		
+		PagingVO pvo = new PagingVO();
+		pvo.setBf_cate_idx(bf_cate_idx);
+		pvo.setSearchCondition(searchCondition);
+		pvo.setSearchValue(searchValue);
+		int totalCount = boardService.totalCount(pvo);
+		pvo.setTempEndPage((int)(Math.ceil(totalCount / (double)perPageNumber)));
+		int TempEndPage = pvo.getTempEndPage();		//게시판 실제 마지막 페이지 번호
+		page = (page - 1) * perPageNumber;
+		pvo.setEndPage((int)(Math.ceil(page / (double)pageNumber) * pageNumber));		//화면에 보여질 마지막 페이지#
+		int endPage = pvo.getEndPage();		
+		pvo.setStartPage((endPage - pageNumber) + 1);		//화면에 보여질 첫번째 페이지#
+		PagingVO vo = new PagingVO();
+		BoardVO recVo = new BoardVO();
+		pvo.setBf_cate_idx(bf_cate_idx);
+		pvo.setSearchCondition(searchCondition);
+		pvo.setSearchValue(searchValue);
+		pvo.setPage(page);		//현재 보고있는 페이지
+		pvo.setPerPageNumber(perPageNumber);		//한 페이지 당 게시글 수
+		List<PagingVO> list = boardService.listAll(pvo);
+		
+		
+		/*recVo.setBf_cate_idx(bf_cate_idx);
+		List<BoardVO> recList = boardService.recList(recVo);*/
+
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("list");		//(jsp filename)
 		mav.addObject("list", list);	//(jsp var, return var)
+		/*mav.addObject("recList", recList);*/
 		mav.addObject("bf_cate_idx", bf_cate_idx);					//bf_cate_idx 1,default = 자유게시판, 2 = 공지사항  
 		mav.addObject("memIdx", session.getAttribute("mem_idx"));	//member 선택 시 세션에 등록된 mem_idx
+		mav.addObject("totalCount", totalCount);
+		
 		return mav;
 	}
 	
@@ -110,24 +133,21 @@ public class BoardController {
 		ModelAndView mav = new ModelAndView();
 		List<ReplyVO> replyList = boardService.replyList(bf_idx);
 		String use_sec = vo.getUse_sec();
+		mav.setViewName("read");
 		System.out.println(use_sec);
 		if(use_sec.equals("Y")) {
 			if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
-				mav.setViewName("read");
 				mav.addObject("read", vo);
 				mav.addObject("preArticle", boardService.preArticle(bf_idx));
 				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 				mav.addObject("replyList", replyList);
 				mav.addObject("memIdx", currentMemeberIdx);
 				boardService.viewCnt(bf_idx, session);
-				
 				return mav;
 			}
 			else {
-				mav.setViewName("read");
 				vo.setBf_contents("비밀글입니다.");
 				mav.addObject("read", vo);
-				
 				return mav;
 			}	
 		}
@@ -158,6 +178,27 @@ public class BoardController {
 			return "Auth";
 	}
 	
+	@RequestMapping(value="/boardupdate", method=RequestMethod.GET)
+	//게시글 수정화면에 기본적인 값(작성일자, 작성자, 제목)을 전달.
+	public ModelAndView upView(@RequestParam int bf_idx, HttpSession session) throws Exception {
+		BoardVO vo = boardService.read(bf_idx);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("update");
+		int currentMemberIdx = (Integer)session.getAttribute("mem_idx");
+		if(currentMemberIdx == vo.getMem_idx() || currentMemberIdx == 1) {
+			mav.addObject("read", vo);
+			return mav;
+		}
+		else {
+			vo.setBf_contents("수정할 수 없습니다.");
+			mav.addObject("read", vo);
+			return mav;
+		}
+		/*ModelAndView mav = new ModelAndView();
+		mav.setViewName("update");
+		mav.addObject("read", boardService.read(bf_idx));
+		return mav;*/
+	}
 	
 	@RequestMapping(value="/boardupdate", method=RequestMethod.POST)
 	//bf_idx를 전달받은 update page이동 후 수정된 내용을 vo 객체에 담아 DB로 전달. update 성공 시 true 반환 및 bf_idx해당 read page로 이동.
@@ -166,15 +207,6 @@ public class BoardController {
 			return "true";
 		else
 			return "false";
-	}
-	
-	@RequestMapping(value="/boardupdate", method=RequestMethod.GET)
-	//게시글 수정화면에 기본적인 값(작성일자, 작성자, 제목)을 전달.
-	public ModelAndView upView(@RequestParam int bf_idx, HttpSession session) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("update");
-		mav.addObject("read", boardService.read(bf_idx));
-		return mav;
 	}
 	
 	@RequestMapping(value="/replyInsert", method=RequestMethod.POST)
