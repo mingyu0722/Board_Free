@@ -7,61 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script type="text/javascript" src="/blockcom/resources/js/ckeditor/ckeditor.js"></script>
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
-<title>Write</title>
-<script>
-	$(function(){
-		$("#btn_save").click(function(){
-			if($("#bf_title").val()==""){
-				alert("제목을 입력하세요");
-				$("#bf_title").focus();
-				return;
-			}
-			if(	CKEDITOR.instances.bf_contents.getData()==""){
-				alert("내용을 입력하세요");
-				$("#bf_contents").focus();
-				return;
-			}
-
-			var data = {};
-			data["bf_title"] = $("#bf_title").val();
-			data["bf_contents"] = CKEDITOR.instances.bf_contents.getData();
-			data["bf_cate_idx"] = ${bf_cate_idx}
-			data["mem_idx"] = ${mem_idx};
-			data["use_sec"] = 'N';
-			if($("#selectSecure").is(":checked")) {
-				data["use_sec"] = 'Y';
-			}
-			
-			$.ajax({
-				type : "POST",
-				url  : "/blockcom/boardwrite",
-				data : data,
-				success : function(response){
-					if(response == "true") {
-						alert("게시물이 등록되었습니다.");
-						location.href="/blockcom/boardlist?bf_cate_idx=${bf_cate_idx}";
-					}
-					else if(response == "false")
-						alert("DB Insert Error!");
-				},
-				error : function(){
-					console.log('error');
-				}
-			});
-		});
-	});
-	
-	$(function(){
-		$("#btn_cancel").click(function(){
-			if(confirm("취소하시겠습니까?")) {
-				location.href="/blockcom/boardlist?bf_cate_idx=${bf_cate_idx}";
-			};
-		});
-	});
-	
-</script>
+<script src="/blockcom/resources/js/write.js"></script>
+<title>Write</title> 
 </head>
-
 <body>
 	<h2>게시글 작성</h2>
 	<form id="form" name="form" method="post" action="boardwrite" accept-charset="UTF-8">
@@ -72,10 +20,6 @@
 				<col width='*%' />
 			</colgroup>
 			<tbody>
-				<!-- <tr>
-					<td>작성자</td> 
-					<td><input type="text" name="brdwriter" size="20" maxlength="20"></td> 
-				</tr> -->
 				<tr>
 					<td>제목</td>
 					<td><input type="text" id="bf_title" name="bf_title" size="70" maxlength="250" placeholder="제목을 입력해주세요"></td>
@@ -93,6 +37,8 @@
 			<button type="button" id="btn_save">확인</button>
 			<button type="button" id="btn_cancel">취소</button>
 		</div>
+		<input type="hidden" id="bf_cate_idx" value="${bf_cate_idx}" />
+		<input type="hidden" id="mem_idx" value="${mem_idx}" />
 	</form>
 </body>
 </html>

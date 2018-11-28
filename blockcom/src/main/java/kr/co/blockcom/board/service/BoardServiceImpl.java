@@ -45,8 +45,35 @@ public class BoardServiceImpl implements BoardService {
 	}*/
 	
 	@Override
-	public List<PagingVO> listAll(BoardVO vo) throws Exception {
-		return boardDao.listAll(vo);
+	public List<PagingVO> listAll(PagingVO pvo) throws Exception {
+		
+		String searchCondition = pvo.getSearchCondition();
+		if(searchCondition.equals("1")) {		//String은 class이므로 비교연산자 == 으로 비교 불가. String.equals() 사용.
+			searchCondition = "bf_title";
+			pvo.setSearchCondition(searchCondition);
+		}
+		else if(searchCondition.equals("2")) {
+			searchCondition = "reg_date";
+			pvo.setSearchCondition(searchCondition);
+		}
+		else if(searchCondition.equals("3")) {
+			searchCondition = "mem_name";
+			pvo.setSearchCondition(searchCondition);
+		}
+			
+		
+		int pageNumber = pvo.getPageNumber();
+		int perPageNumber = pvo.getPerPageNumber();
+		int totalCount = totalCount(pvo);
+		int tempEndPage = (int)(Math.ceil(totalCount / (double)perPageNumber));
+		int page = (pvo.getPage() - 1) * pvo.getPerPageNumber();
+		int endPage = (int)(Math.ceil(page / (double)pageNumber) * pageNumber);
+		int startPage = (endPage - pageNumber) + 1;
+		
+		pvo.setTempEndPage(tempEndPage);
+		pvo.setPage(page);
+		pvo.setEndPage(endPage);
+		return boardDao.listAll(pvo);
 	}
 	
 	@Override

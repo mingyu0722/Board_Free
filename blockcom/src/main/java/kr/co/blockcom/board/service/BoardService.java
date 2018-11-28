@@ -22,7 +22,7 @@ public interface BoardService {
 	public List<BoardVO> recList(BoardVO vo) throws Exception;*/
 	
 	//List
-	public List<PagingVO> listAll(BoardVO vo) throws Exception;
+	public List<PagingVO> listAll(PagingVO vo) throws Exception;
 	
 	//Write
 	public boolean write(BoardVO vo) throws Exception;

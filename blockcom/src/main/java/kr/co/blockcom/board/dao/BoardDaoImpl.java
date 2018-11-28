@@ -32,7 +32,7 @@ public class BoardDaoImpl implements BoardDao {
 	}*/
 	
 	@Override
-	public List<PagingVO> listAll(BoardVO vo) throws Exception {
+	public List<PagingVO> listAll(PagingVO vo) throws Exception {
 		
 		return sessionTemplate.selectList("board.listAll", vo);
 	}

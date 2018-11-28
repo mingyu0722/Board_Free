@@ -21,7 +21,7 @@ public interface BoardDao {
 	
 	//List
 //	public List<BoardVO> listAll(int bf_cate_idx) throws Exception;
-	public List<PagingVO> listAll(BoardVO vo) throws Exception;
+	public List<PagingVO> listAll(PagingVO vo) throws Exception;
 	
 	//Write	
 	public boolean insert(BoardVO vo);

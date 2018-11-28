@@ -52,33 +52,20 @@ public class BoardController {
 	public ModelAndView list(@RequestParam int bf_cate_idx, @RequestParam(defaultValue="") String searchCondition, @RequestParam(defaultValue="") String searchValue,
 			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="5") int perPageNumber, @RequestParam(defaultValue="5") int pageNumber, HttpSession session) 
 					throws Exception {
-		if(searchCondition.equals("1"))			//String은 class이므로 비교연산자 == 으로 비교 불가. String.equals() 사용.
-			searchCondition = "bf_title";
-		else if(searchCondition.equals("2"))
-			searchCondition = "reg_date";
-		else if(searchCondition.equals("3"))
-			searchCondition = "mem_name";
 		
 		PagingVO pvo = new PagingVO();
-		pvo.setBf_cate_idx(bf_cate_idx);
-		pvo.setSearchCondition(searchCondition);
-		pvo.setSearchValue(searchValue);
-		int totalCount = boardService.totalCount(pvo);
-		pvo.setTempEndPage((int)(Math.ceil(totalCount / (double)perPageNumber)));
-		int TempEndPage = pvo.getTempEndPage();		//게시판 실제 마지막 페이지 번호
-		page = (page - 1) * perPageNumber;
-		pvo.setEndPage((int)(Math.ceil(page / (double)pageNumber) * pageNumber));		//화면에 보여질 마지막 페이지#
-		int endPage = pvo.getEndPage();		
-		pvo.setStartPage((endPage - pageNumber) + 1);		//화면에 보여질 첫번째 페이지#
-		PagingVO vo = new PagingVO();
-		BoardVO recVo = new BoardVO();
-		pvo.setBf_cate_idx(bf_cate_idx);
-		pvo.setSearchCondition(searchCondition);
-		pvo.setSearchValue(searchValue);
-		pvo.setPage(page);		//현재 보고있는 페이지
-		pvo.setPerPageNumber(perPageNumber);		//한 페이지 당 게시글 수
-		List<PagingVO> list = boardService.listAll(pvo);
 		
+		pvo.setBf_cate_idx(bf_cate_idx);
+		pvo.setSearchCondition(searchCondition);
+		pvo.setSearchValue(searchValue);
+		pvo.setPage(page);
+		pvo.setPerPageNumber(perPageNumber);
+		pvo.setPageNumber(pageNumber);
+		
+		int totalCount = boardService.totalCount(pvo);
+		pvo.setTotalCount(totalCount);
+		
+		List<PagingVO> list = boardService.listAll(pvo);
 		
 		/*recVo.setBf_cate_idx(bf_cate_idx);
 		List<BoardVO> recList = boardService.recList(recVo);*/
@@ -90,7 +77,8 @@ public class BoardController {
 		mav.addObject("bf_cate_idx", bf_cate_idx);					//bf_cate_idx 1,default = 자유게시판, 2 = 공지사항  
 		mav.addObject("memIdx", session.getAttribute("mem_idx"));	//member 선택 시 세션에 등록된 mem_idx
 		mav.addObject("totalCount", totalCount);
-		
+		mav.addObject("startPage", pvo.getStartPage());
+		mav.addObject("endPage", pvo.getEndPage());
 		return mav;
 	}
 	

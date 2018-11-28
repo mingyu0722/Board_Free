@@ -9,168 +9,7 @@
 <title>Read</title>
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-$(function(){
-	
-	
-	$("#btn_list").click(function(){
-		location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
-	})
-	$("#btn_update").click(function(){
-		location.href="/blockcom/boardupdate?bf_idx=${read.bf_idx}";
-	});		
-	
-	$("#btn_delete").click(function(){
-		if(confirm("삭제하시겠습니까?")){
-			var data = {};
-			data["bf_idx"] = ${read.bf_idx};
-			data["mem_idx"] = ${read.mem_idx};
-			$.ajax({
-				type : "POST",
-				url : "/blockcom/boardread",
-				data : data,
-				success : function(response){
-					if(response == "true") {
-						alert("게시물이 삭제되었습니다.");
-						location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
-					}
-				},
-				error : function(response){
-					if(response == "false") 
-						console.log('error');
-				}
-			});
-		}
-	});
-	
-	
-});
-
-//댓글관련 function
-$(function(){	
-	$("#reply_btn").click(function(){
-		if($("#bfr_contents").val()==""){
-			alert("내용을 입력하세요");
-			$("#bfr_contents").focus();
-			return;
-		}
-		
-		var data = {};
-		data["bf_idx"] = ${read.bf_idx};
-		data["bfr_contents"] = $("#bfr_contents").val();
-		data["mem_idx"] = ${mem_idx};
-		$.ajax({
-			type : "POST",
-			url : "/blockcom/replyInsert",
-			data : data,
-			success : function(response){
-				if(response == "true") {
-					alert("댓글이 등록되었습니다.");
-					location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
-				}
-			},
-			error : function(){
-				console.log('error');
-			}
-		});
-	});
-	
-	$(".modify_btn").click(function(){
-		var bfr_idx = $(this).val();
-		var mem_idx = ${mem_idx};
-		var reply_memIdx = $('.mem_idx_'+bfr_idx).val();
-		if(mem_idx != reply_memIdx  && mem_idx != 1) {
-			alert("수정 권한이 없습니다.");
-			return;
-		}
-		
-		$('.bfr_contents_'+bfr_idx).removeAttr("readonly");
-		$('.bfr_contents_'+bfr_idx).focus();
-		$('.save_btn_'+bfr_idx).removeAttr("style");
-		
-		$(".save_btn_"+bfr_idx).click(function(){
-			if(confirm("수정하시겠습니까?")) {
-				var bfr_contents = $('.bfr_contents_'+bfr_idx).val();
-				var data = {};
-				data["bfr_idx"] = bfr_idx;
-				data["bfr_contents"] = bfr_contents;
-				
-				$.ajax({
-					type : "POST",
-					url : "/blockcom/replyUpdate",
-					data : data,
-					success : function(response){
-						if(response == "true") {
-							alert("댓글이 수정되었습니다.");
-							location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
-						}
-					},
-					error : function(){
-						console.log('error');
-					}
-				});
-			}
-		});
-	});
-	
-	$(".delete_btn").click(function(){
-		var bfr_idx = $(this).val();
-		var reply_memIdx = $('.mem_idx_'+bfr_idx).val();
-		
-		if(confirm("댓글을 삭제 하시겠습니까?")) {
-			var data = {};
-			data["bfr_idx"] = bfr_idx;
-			data["mem_idx"] = reply_memIdx;
-			$.ajax({
-				type : "POST",
-				url : "/blockcom/replyDelete",
-				data : data,
-				success : function(response){
-					if(response == "true") {
-						alert("댓글이 삭제되었습니다.");
-						location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
-					}
-					else if(response == "Auth") {
-						alert("삭제 권한이 없습니다.");
-						return;
-					}
-				},
-				error : function(){
-					console.log('error');
-				}
-			});
-		}
-	});
-});
-
-function preArticle() {
-	var use_sec = '${preArticle.use_sec}';
-	var memIdx = '${memIdx}';
-	if(use_sec == 'Y') {
-		if(memIdx == '${preArticle.mem_idx}')
-			location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";	
-		else
-			alert("(비밀글)읽을 권한이 없습니다.");			
-	} else if(use_sec == 'N') {
-		location.href="/blockcom/boardread?bf_idx=${preArticle.bf_idx}";
-	}
-};
-
-function nextArticle() {
-	var use_sec = '${nextArticle.use_sec}';
-	var memIdx = '${memIdx}';
-	if(use_sec == 'Y') {
-		if(memIdx == '${nextArticle.mem_idx}') {
-			location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
-		}
-		else {
-			alert("(비밀글)읽을 권한이 없습니다.");
-		}
-	} else if(use_sec == 'N') {
-		location.href="/blockcom/boardread?bf_idx=${nextArticle.bf_idx}";
-	}
-};
-</script>
+<script src="/blockcom/resources/js/read.js"></script>
 </head>
 <body>
 <h2>게시글 보기</h2>
@@ -201,20 +40,23 @@ function nextArticle() {
 		</tbody>
 	</table>
 	
-	<input type="hidden" name="bf_idx" value="${read.bf_idx}">
-	<input type="hidden" name="mem_idx" value="${read.mem_idx}">
-	<input type="hidden" name="bf_cate_idx" value="${read.bf_cate_idx}">
+	<input type="hidden" id="bf_idx" value="${read.bf_idx}" />
+	<input type="hidden" id="mem_idx" value="${read.mem_idx}" />
+	<input type="hidden" id="bf_cate_idx" value="${read.bf_cate_idx}" />
+	<input type="hidden" id="memIdx" value="${memIdx}" />
 	
 	<button type = "button" id="btn_list">목록</button>
+	
 	<c:set var="memIdx" value="${memIdx}" />
 	<c:set var="mem_idx" value="${read.mem_idx}" />
 		<c:choose>
-			<c:when test="${memIdx eq mem_idx}">
+			<c:when test="${memIdx eq mem_idx || memIdx eq 1}">
 				<button type = "button" id="btn_delete">삭제</button>	
 				<button type = "button" id="btn_update">수정</button>	
 			</c:when>
 			<c:otherwise></c:otherwise>
 		</c:choose>
+	<br></br>
 	<table border="1" style="width:600px" name="preNextArticle">
 		<tr>
 			<td>다음글</td>
@@ -228,7 +70,9 @@ function nextArticle() {
 							<c:if test="${use_sec == 'N' }"><td><a href="#" onclick="nextArticle(); return false;">${nextArticle.bf_title}</td></c:if>
 	 						<td>작성자: ${nextArticle.mem_name}</td>
 	 				</c:if>
-	 			<input type="hidden" id="mem_idx" value="${nextArticle.mem_idx}" /> 							
+	 			<input type="hidden" id="next_mem_idx" value="${nextArticle.mem_idx}" />
+	 			<input type="hidden" id="next_use_sec" value="${nextArticle.use_sec}" />
+	 			<input type="hidden" id="next_bf_idx" value="${nextArticle.bf_idx}" /> 							
 	 		</tr>	
 	 		<tr>
 	 			<td>이전글</td>
@@ -240,7 +84,9 @@ function nextArticle() {
 							<c:if test="${use_sec == 'N'}"><td><a href="#" onclick="preArticle(); return false;">${preArticle.bf_title}</td></c:if>
 	 						<td>작성자: ${preArticle.mem_name}</td>
 	 				</c:if>
-	 			<input type="hidden" id="mem_idx" value="${preArticle.mem_idx}" />
+	 			<input type="hidden" id="pre_mem_idx" value="${preArticle.mem_idx}" />
+	 			<input type="hidden" id="pre_use_sec" value="${preArticle.use_sec}" />
+	 			<input type="hidden" id="pre_bf_idx" value="${preArticle.bf_idx}" /> 
 	 		</tr>
 	 	</table>
 	 	
@@ -270,7 +116,7 @@ function nextArticle() {
 	 			<c:set var="memIdx" value="${memIdx}" />
 				<c:set var="mem_idx" value="${replyList.mem_idx}" />
 				<c:choose>
-					<c:when test="${memIdx eq mem_idx}">
+					<c:when test="${memIdx eq mem_idx || memIdx eq 1}">
 						<td><button class="modify_btn" type="button" value="${replyList.bfr_idx}">수정</button></td>
 	 					<td><button class="delete_btn" type="button" value="${replyList.bfr_idx}">삭제</button></td>
 					</c:when>

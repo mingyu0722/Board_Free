@@ -9,62 +9,7 @@
 <title>Read</title>
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="/blockcom/resources/js/ckeditor/ckeditor.js"></script>
-<script>
-	$(function(){
-		$("#btn_list").click(function(){
-			location.href="/blockcom/boardlist?bf_cate_idx=${read.bf_cate_idx}";
-		});	
-	});
-</script>
-<script>
-	$(function(){
-		$("#btn_save").click(function(){
-			if($("#bf_title").val()==""){
-				alert("제목을 입력하세요");
-				$("#bf_title").focus();
-				return;
-			}
-			if(CKEDITOR.instances.bf_contents.getData()==""){
-				alert("내용을 입력하세요");
-				$("#bf_contents").focus();
-				return;
-			}
-			
-			var data = {};
-			data["bf_idx"] = ${read.bf_idx};
-			data["bf_title"] = $("#bf_title").val();
-			data["bf_contents"] = CKEDITOR.instances.bf_contents.getData();
-			data["use_sec"] = 'N';
-			if($("#selectSecure").is(":checked")) {
-				data["use_sec"] = 'Y';
-			}
-			var bf_cate_idx = ${read.bf_cate_idx};
-			$.ajax({
-				type : "POST",
-				url  : "/blockcom/boardupdate",
-				data : data,
-				success : function(response){
-					if(response == "true") {
-						alert("게시물이 수정되었습니다.");
-						location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx;
-					}
-					else if(response == "false")
-						alert("DB Update Error!");
-				},
-				error : function(){
-					console.log('error');
-				}
-			});
-		})
-	})
-	$(function(){
-		$("#btn_cancel").click(function(){
-			if(confirm("취소하시겠습니까?")) {
-				location.href="/blockcom/boardread?bf_idx=${read.bf_idx}";
-			}
-		})
-	})
-</script>
+<script src="/blockcom/resources/js/update.js"></script>
 </head>
 <body>
 <h2>게시글 수정</h2>
@@ -100,7 +45,8 @@
 			</tr>
 		</tbody>
 	</table>
-	<input type="hidden" id="bf_idx" name="bf_idx" value="${read.bf_idx}" />	
+	<input type="hidden" id="bf_idx" value="${read.bf_idx}" />
+	<input type="hidden" id="bf_cate_idx" value="${read.bf_cate_idx}" />	
 </form>
 	 <button type = "button" id="btn_list">목록</button>
 	 <c:set var="auth" value="${read.bf_contents}" />
