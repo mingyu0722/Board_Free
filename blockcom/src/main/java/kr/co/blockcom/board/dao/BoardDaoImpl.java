@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import kr.co.blockcom.board.vo.BoardVO;
-import kr.co.blockcom.board.vo.PageMaker;
 import kr.co.blockcom.board.vo.PagingVO;
 
 @Repository

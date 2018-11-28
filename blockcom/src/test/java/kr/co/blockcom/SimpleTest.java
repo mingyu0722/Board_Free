@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import kr.co.blockcom.board.service.BoardService;
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.PagingVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -50,5 +51,13 @@ public class SimpleTest {
 		Assert.assertEquals(2, recList.size());
 	}*/
 	
+	@Test
+	public void totalCountTest() throws Exception {
+		PagingVO vo = new PagingVO();
+		vo.setBf_cate_idx(1);
+		vo.setSearchCondition("mem_name");
+		vo.setSearchValue("사나");
+		Assert.assertEquals(4, boardService.totalCount(vo));
+	}
 	
 }

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpSession;
 
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
-import kr.co.blockcom.board.vo.PageMaker;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 

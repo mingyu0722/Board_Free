@@ -2,7 +2,6 @@ package kr.co.blockcom.board.service;
 
 import java.util.List;
 
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import kr.co.blockcom.board.dao.MemberDao;
 import kr.co.blockcom.board.dao.ReplyDao;
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
-import kr.co.blockcom.board.vo.PageMaker;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 
