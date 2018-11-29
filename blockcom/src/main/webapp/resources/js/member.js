@@ -10,7 +10,7 @@ $(function(){
 				url  : "/blockcom/member",
 				data : data,
 				success : function() {
-					location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&pageNumber=5";
+					location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&blockSize=5";
 				},
 				error : function(){
 					console.log('error');

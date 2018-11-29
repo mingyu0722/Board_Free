@@ -4,11 +4,11 @@ $(function(){
 		});	
 		
 		$("#btn_free").click(function(){
-			location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&pageNumber=5";
+			location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&blockSize=5";
 		});	
 		
 		$("#btn_notice").click(function(){
-			location.href="/blockcom/boardlist?bf_cate_idx=2&page=1&perPageNumber=10&pageNumber=5";
+			location.href="/blockcom/boardlist?bf_cate_idx=2&page=1&perPageNumber=10&blockSize=5";
 		});
 		
  		$("#list tr a").click(function(){
@@ -50,7 +50,7 @@ $(function(){
  			var searchValue = $("#searchValue").val();
  			var bf_cate_idx = $("#bf_cate_idx").val();
  			
- 			location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&pageNumber=5";
+ 			location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&blockSize=5";
  		});
 	});
 	function EnterFunc() {
@@ -59,6 +59,6 @@ $(function(){
  			var searchValue = $("#searchValue").val();
  			var bf_cate_idx = $("#bf_cate_idx").val();
 	 			
-	 		location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&pageNumber=5";
+	 		location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&blockSize=5";
 		}
 	};

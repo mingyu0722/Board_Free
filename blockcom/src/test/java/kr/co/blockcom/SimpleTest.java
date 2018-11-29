@@ -1,7 +1,5 @@
 package kr.co.blockcom;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +9,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import kr.co.blockcom.board.service.BoardService;
-import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.PagingVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)

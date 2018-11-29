@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.blockcom.board.mapper.ReplyMapper">
+
+	<!-- Reply -->
+	<select id="replyList" resultType="kr.co.blockcom.board.vo.BoardVO"> <!-- select를 할때는 result type 반드시!! -->
+		SELECT 
+			bfr.bfr_idx, 
+			bfr.bfr_contents, 
+			bfr.reg_date, 
+			bfr.mod_date, 
+			mb.mem_name, 
+			bfr.mem_idx
+		FROM 
+			board_free_reply as bfr
+		JOIN 
+			member as mb
+		WHERE 
+			bfr.use_flag = 'Y'
+		AND 
+			mb.mem_idx = bfr.mem_idx
+		AND 
+			bfr.bf_idx = #{bf_idx};
+	</select>
+	
+	<update id="replyUpdate">
+		UPDATE 
+			board_free_reply
+		SET 
+			bfr_contents = #{bfr_contents}, 
+			mod_date = current_timestamp
+		WHERE 
+			bfr_idx = #{bfr_idx};
+	</update>
+	
+	<update id="replyDelete">
+		UPDATE 
+			board_free_reply
+		SET 
+			use_flag = 'N'
+		WHERE 
+			bfr_idx = #{bfr_idx};
+	</update>
+	
+	<insert id="replyInsert">
+		INSERT 
+			INTO 
+				board_free_reply
+				(
+					bf_idx, 
+					bfr_contents, 
+					mem_idx, 
+					reg_date
+				)
+			VALUES 
+			(
+				#{bf_idx}, 
+				#{bfr_contents}, 
+				#{mem_idx}, 
+				default
+			);
+	</insert>
+</mapper>

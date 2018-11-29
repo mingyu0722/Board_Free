@@ -10,6 +10,17 @@
 <title>Board List</title>
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
 <script src="/blockcom/resources/js/list.js"></script>
+<style>
+	.pagingUl li {
+		display: inline-block;
+	}
+	.pagingUl li {
+		color: black;
+		float: left;
+		padding: 8px 16px;
+		text-decoration: none;
+	}
+</style>
 </head> 
 <body>
 	<h2>게시글 목록</h2>
@@ -99,13 +110,25 @@
 	<c:if test= "${fn:length(list) == 0}"><br>등록된 게시글이 없습니다.<br><br></c:if>
 	<button id="btn_write">글쓰기</button>
 	<input type="hidden" id="bf_cate_idx" value="${bf_cate_idx}" />
-	${memIdx}
-	<%-- <ul class="paging">
-		<li>◀</li>
+	${memIdx}<br>
+
+	<ul class="pagingUl">
+		<c:if test="${prev}">
+			<li><a 
+				href='boardlist?bf_cate_idx=${bf_cate_idx}&page=${page - 1}&perPageNumber=${perPageNumber}&blockSize=${blockSize}'>
+				&laquo;
+				</a>
+			</li>
+		</c:if>
 		<c:forEach begin="${startPage}" end="${endPage}" var="idx">
-			<li <c:out value="${page == idx ? 'class=active' : ''}"/>>${idx}</li>
+			<li
+				class='<c:out value="${idx == page? 'current':''}" />'>
+				<a href='boardlist?bf_cate_idx=${bf_cate_idx}&page=${idx}&perPageNumber=${perPageNumber}&blockSize=${blockSize}'>${idx}</a>
+			</li>
 		</c:forEach>
-		<li>▶</li>
-	</ul> --%>
+		<c:if test="${next}">
+			<li><a href='boardlist?bf_cate_idx=${bf_cate_idx}&page=${page + 1}&perPageNumber=${perPageNumber}&blockSize=${blockSize}'>&raquo;</a></li>
+		</c:if>
+	</ul>
 </body>
 </html>
