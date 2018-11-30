@@ -112,6 +112,8 @@
 	 			<input type="hidden" id="pre_bf_idx" value="${preArticle.bf_idx}" /> 
 	 		</tr>
 	 	</table>
+	 	<c:set var="rec_flag" value="${rec_flag}" />
+			<c:if test="${rec_flag}"><p>님 이미 추천함</p></c:if>
 	 	
 	 <br>
 	 <h3>댓글</h3>

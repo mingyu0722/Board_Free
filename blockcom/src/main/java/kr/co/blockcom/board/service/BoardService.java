@@ -32,6 +32,9 @@ public interface BoardService {
 	//Recommend
 	public void recommend(BoardVO vo) throws Exception;
 	
+	//Recommend Flag Confirm
+	public boolean recommend_flag(BoardVO vo) throws Exception;
+	
 	//Previous Article
 	public BoardVO preArticle(int bf_idx) throws Exception;
 	

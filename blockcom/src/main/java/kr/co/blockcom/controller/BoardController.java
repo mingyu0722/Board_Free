@@ -128,15 +128,17 @@ public class BoardController {
 		vo.setBf_idx(bf_idx);
 		vo.setMem_idx(currentMemeberIdx);
 		vo = boardService.read(vo);
-		ModelAndView mav = new ModelAndView();
 		
 		ReplyVO rvo = new ReplyVO();
 		rvo.setBf_idx(bf_idx);
 		rvo.setPage(rpage);
 		rvo.setPerPageNumber(5);
 		rvo.setBlockSize(5);
+		
 		List<ReplyVO> replyList = boardService.replyList(rvo);
 		String use_sec = vo.getUse_sec();
+		
+		ModelAndView mav = new ModelAndView();
 		mav.setViewName("read");
 		if(use_sec.equals("Y")) {
 			if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
@@ -145,6 +147,7 @@ public class BoardController {
 				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 				mav.addObject("replyList", replyList);
 				mav.addObject("memIdx", currentMemeberIdx);
+				mav.addObject("rec_flag", boardService.recommend_flag(vo));
 				mav.addObject("rpage", rvo.getPage());
 				mav.addObject("startPage", rvo.getStartPage());
 				mav.addObject("endPage", rvo.getTempEndPage());
@@ -166,6 +169,7 @@ public class BoardController {
 			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 			mav.addObject("replyList", replyList);
 			mav.addObject("memIdx", currentMemeberIdx);
+			mav.addObject("rec_flag", boardService.recommend_flag(vo));
 			mav.addObject("rpage", rvo.getPage());
 			mav.addObject("startPage", rvo.getStartPage());
 			mav.addObject("endPage", rvo.getTempEndPage());

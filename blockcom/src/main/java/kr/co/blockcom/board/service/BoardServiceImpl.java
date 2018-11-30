@@ -100,6 +100,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public boolean recommend_flag(BoardVO vo) throws Exception {
+		if(boardMapper.recommend_flag(vo) > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
 	public BoardVO preArticle(int bf_idx) throws Exception {
 		return boardMapper.preArticle(bf_idx);
 	}

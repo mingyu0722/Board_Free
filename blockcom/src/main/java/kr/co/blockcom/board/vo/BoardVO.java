@@ -17,7 +17,7 @@ public class BoardVO {
 	private Date reg_date;
 	private Date mod_date;
 	private int view_cnt;
-	private int rec_flag;			//게시글 추천여부
+	private boolean rec_flag;			//게시글 추천여부
 	private String use_flag;
 	private String use_sec;
 	private int bfr_idx;
