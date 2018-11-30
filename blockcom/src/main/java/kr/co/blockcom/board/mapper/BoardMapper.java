@@ -45,7 +45,22 @@ public interface BoardMapper {
 		 * @return BoardVO
 		 * @throws Exception
 		 */
-		public BoardVO read(int bf_idx) throws Exception;
+		public BoardVO read(BoardVO vo) throws Exception;
+		
+		/**
+		 * 추천
+		 * @param vo
+		 * @throws Exception
+		 */
+		public void recommend(BoardVO vo) throws Exception;
+		
+		/**
+		 * 추천여부확인
+		 * @param vo
+		 * @return int
+		 * @throws Exception
+		 */
+		public int recommend_flag(BoardVO vo) throws Exception;
 		
 		/**
 		 * 이전글
@@ -80,17 +95,18 @@ public interface BoardMapper {
 		public boolean update(BoardVO vo) throws Exception;
 		
 		/**
-		 * 조회수
-		 * @param bf_idx
-		 * @throws Exception
-		 */
-		public void viewCnt(int bf_idx) throws Exception;
-		
-		/**
 		 * 검색결과 리스트
 		 * @param BoardVO
 		 * @return List<BoardVO>
 		 * @throws Exception
 		 */
 		public List<BoardVO> searchList(BoardVO vo) throws Exception;
+		
+		/**
+		 * 조회수 증가
+		 * @param BoardVO
+		 * @throws Exception
+		 */
+		public void viewCnt(BoardVO vo) throws Exception;
+		
 }

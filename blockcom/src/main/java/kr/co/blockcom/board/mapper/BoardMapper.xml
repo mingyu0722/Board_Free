@@ -45,10 +45,15 @@
 			mb.mem_name, 
 			bf.reg_date, 
 			bf.mod_date, 
-			bf.view_cnt, 
 			bf.bf_cate_idx, 
 			bf.use_sec, 
 			bf.mem_idx,
+			(
+				SELECT
+					COUNT(*)
+					FROM view_count
+					WHERE bf.bf_idx = view_count.bf_idx
+			) AS view_cnt,
 	   		(
 	   			SELECT 
 	   				COUNT(*) 
@@ -94,6 +99,34 @@
 			LIMIT 
 				#{listStart}, #{perPageNumber};
 	</select>
+	
+	<!-- View Count -->
+	<insert id="viewCnt">
+		INSERT 
+			INTO 
+				view_count
+				(
+					bf_idx, 
+					mem_idx
+				) 
+				SELECT 
+					#{bf_idx}, #{mem_idx}
+				FROM 
+					DUAL
+				WHERE 
+					NOT EXISTS
+					(
+						SELECT 
+							* 
+						FROM 
+							view_count 
+						WHERE 
+							bf_idx = #{bf_idx} 
+						AND 
+							mem_idx = #{mem_idx}
+					);
+	</insert>
+	
 	<!-- <select id="recList" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT
 			bf.bf_idx, 
@@ -165,6 +198,45 @@
 				bf_idx = #{bf_idx};
 	</select>
 	
+	<!-- Recommend -->
+	<insert id="recommend">
+		INSERT 
+			INTO 
+				recommend
+				(
+					bf_idx, 
+					mem_idx
+				) 
+				SELECT 
+					#{bf_idx}, #{mem_idx}
+				FROM 
+					DUAL
+				WHERE 
+					NOT EXISTS
+					(
+						SELECT 
+							* 
+						FROM 
+							recommend
+						WHERE 
+							bf_idx = #{bf_idx} 
+						AND 
+							mem_idx = #{mem_idx}
+					);
+	</insert>
+	
+	<select id="recommend_flag" resultType="int">
+		SELECT
+			*
+			FROM
+				recommend
+			WHERE
+				bf_idx = #{bf_idx}
+			AND
+				mem_idx = #{mem_idx};
+	</select>
+	
+	<!-- PreArticle & NextArticle -->
 	<select id="preArticle" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT 
 			bf.bf_idx, 
@@ -248,12 +320,5 @@
 			bf_idx = #{bf_idx};
 	</update>
 	
-	<update id="viewCnt">
-		UPDATE 
-			board_free
-		SET 
-			view_cnt = view_cnt + 1
-		WHERE 
-			bf_idx = #{bf_idx};
-	</update>
+	
 </mapper>

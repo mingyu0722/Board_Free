@@ -55,11 +55,11 @@ public class UnitTest {
 		Assert.assertEquals(true, result);
 	}
 	
-	@Test
+	/*@Test
 	public void readTest() throws Exception {
 		BoardVO vo = boardService.read(1);
 		Assert.assertEquals(1, vo.getBf_idx());
-	}
+	}*/
 	
 	@Test
 	public void deleteTest() throws Exception {

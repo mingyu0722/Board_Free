@@ -78,6 +78,7 @@
 			</c:when>
 			<c:otherwise></c:otherwise>
 		</c:choose>
+	<input type="checkbox" id="recommend" onchange="recommend()">추천</>
 	<br></br>
 	<table border="1" style="width:600px" name="preNextArticle">
 		<tr>

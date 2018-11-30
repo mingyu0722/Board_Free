@@ -30,10 +30,30 @@ $(function(){
 				}
 			});
 		}
-	});
-	
-	
+	});	
 });
+
+function recommend() {
+	if($("#recommend").is(":checked")) {
+		var data = {};
+		data["bf_idx"] = $("#bf_idx").val();
+		data["mem_idx"] = $("#mem_idx").val();
+		
+		$.ajax({
+			type : "POST",
+			url : "/blockcom/recommend",
+			data : data,
+			success : function(response){
+				alert("추천되었습니다.");
+				return;
+			},
+			error : function(response){ 
+				console.log('error');
+				return;
+			}
+		});
+	}
+}
 
 //댓글관련 function
 $(function(){	

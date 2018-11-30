@@ -124,7 +124,10 @@ public class BoardController {
 	public ModelAndView view(@RequestParam int bf_idx, @RequestParam int rpage, HttpSession session) throws Exception {
 		
 		int currentMemeberIdx = (Integer) session.getAttribute("mem_idx");
-		BoardVO vo = boardService.read(bf_idx);
+		BoardVO vo = new BoardVO();
+		vo.setBf_idx(bf_idx);
+		vo.setMem_idx(currentMemeberIdx);
+		vo = boardService.read(vo);
 		ModelAndView mav = new ModelAndView();
 		
 		ReplyVO rvo = new ReplyVO();
@@ -147,7 +150,6 @@ public class BoardController {
 				mav.addObject("endPage", rvo.getTempEndPage());
 				mav.addObject("prev", rvo.isPrev());
 				mav.addObject("next", rvo.isNext());
-				boardService.viewCnt(bf_idx, session);
 				return mav;
 			}
 			else {
@@ -169,7 +171,6 @@ public class BoardController {
 			mav.addObject("endPage", rvo.getTempEndPage());
 			mav.addObject("prev", rvo.isPrev());
 			mav.addObject("next", rvo.isNext());
-			boardService.viewCnt(bf_idx, session);
 			return mav;
 		}
 	}
@@ -188,10 +189,19 @@ public class BoardController {
 			return "Auth";
 	}
 	
+	@PostMapping(value="/recommend")
+	public @ResponseBody void recommend(@ModelAttribute BoardVO vo, HttpSession session) throws Exception {
+		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
+		vo.setMem_idx(currentMemeberIdx);
+		boardService.recommend(vo);
+	}
+	
 	@GetMapping(value="/boardupdate")
 	//게시글 수정화면에 기본적인 값(작성일자, 작성자, 제목)을 전달.
 	public ModelAndView upView(@RequestParam int bf_idx, HttpSession session) throws Exception {
-		BoardVO vo = boardService.read(bf_idx);
+		BoardVO vo = new BoardVO();
+		vo.setBf_idx(bf_idx);
+		vo = boardService.read(vo);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("update");
 		int currentMemberIdx = (Integer)session.getAttribute("mem_idx");
@@ -241,7 +251,6 @@ public class BoardController {
 	public @ResponseBody String replyDelete(@ModelAttribute ReplyVO vo,  HttpSession session) throws Exception {
 		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
 		int bfr_idx = vo.getBfr_idx();
-		System.out.println(currentMemeberIdx+" "+vo.getMem_idx()+" "+vo.getBfr_idx());
 		if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
 			if(boardService.replyDelete(bfr_idx) == true)
 				return "true";

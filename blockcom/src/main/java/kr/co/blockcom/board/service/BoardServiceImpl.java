@@ -64,7 +64,6 @@ public class BoardServiceImpl implements BoardService {
 		int totalCount = totalCount(pvo);
 		pvo.setTotalCount(totalCount);
 		
-		System.out.println(pvo.getSearchCondition()+" "+pvo.getSearchValue()+" "+pvo.getTotalCount());
 		PageMaker pageMaker = new PageMaker(pvo);
 		pvo = pageMaker.setPaging(pvo);
 		
@@ -90,8 +89,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public BoardVO read(int bf_idx) throws Exception {
-		return boardMapper.read(bf_idx);
+	public BoardVO read(BoardVO vo) throws Exception {
+		boardMapper.viewCnt(vo);
+		return boardMapper.read(vo);
+	}
+	
+	@Override
+	public void recommend(BoardVO vo) throws Exception {
+		boardMapper.recommend(vo);
 	}
 	
 	@Override
@@ -118,16 +123,6 @@ public class BoardServiceImpl implements BoardService {
 			return true;
 		else
 			return false;
-	}
-	
-	@Override
-	public void viewCnt(int bf_idx, HttpSession session) throws Exception {
-		long update_time = 0;
-		long current_time = System.currentTimeMillis();
-		if(current_time - update_time > 5*1000) {
-			boardMapper.viewCnt(bf_idx);
-			session.setAttribute("update_time_"+bf_idx, current_time);
-		}
 	}
 	
 	@Override

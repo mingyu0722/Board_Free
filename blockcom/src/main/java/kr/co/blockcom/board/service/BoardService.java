@@ -27,7 +27,10 @@ public interface BoardService {
 	public boolean write(BoardVO vo) throws Exception;
 	
 	//Read
-	public BoardVO read(int bf_idx) throws Exception;
+	public BoardVO read(BoardVO vo) throws Exception;
+	
+	//Recommend
+	public void recommend(BoardVO vo) throws Exception;
 	
 	//Previous Article
 	public BoardVO preArticle(int bf_idx) throws Exception;
@@ -41,9 +44,6 @@ public interface BoardService {
 	//Update
 	//public void update(BoardVO vo) throws Exception;
 	public boolean update(BoardVO vo) throws Exception;
-	
-	//View Count
-	public void viewCnt(int bf_idx, HttpSession session) throws Exception;
 	
 	//Reply List
 	public List<ReplyVO> replyList(ReplyVO rvo) throws Exception;
