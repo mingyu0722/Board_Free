@@ -55,7 +55,7 @@ $(function(){
 			success : function(response){
 				if(response == "true") {
 					alert("댓글이 등록되었습니다.");
-					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val();
+					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 				}
 			},
 			error : function(){
@@ -87,7 +87,7 @@ $(function(){
 					success : function(response){
 						if(response == "true") {
 							alert("댓글이 수정되었습니다.");
-							location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val();
+							location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 						}
 					},
 					error : function(){
@@ -113,7 +113,7 @@ $(function(){
 				success : function(response){
 					if(response == "true") {
 						alert("댓글이 삭제되었습니다.");
-						location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val();
+						location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 					}
 					else if(response == "Auth") {
 						alert("삭제 권한이 없습니다.");
@@ -135,11 +135,11 @@ function preArticle() {
 	var bf_idx = $("#pre_bf_idx").val();
 	if(use_sec == 'Y') {
 		if(memIdx == $("#pre_mem_idx").val())
-			location.href="/blockcom/boardread?bf_idx="+bf_idx;	
+			location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";	
 		else
 			alert("(비밀글)읽을 권한이 없습니다.");			
 	} else if(use_sec == 'N') {
-		location.href="/blockcom/boardread?bf_idx="+bf_idx;
+		location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";
 	}
 };
 
@@ -149,12 +149,12 @@ function nextArticle() {
 	var bf_idx = $("#next_bf_idx").val();
 	if(use_sec == 'Y') {
 		if(memIdx == $("#next_mem_idx").val()) {
-			location.href="/blockcom/boardread?bf_idx="+bf_idx;
+			location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";
 		}
 		else {
 			alert("(비밀글)읽을 권한이 없습니다.");
 		}
 	} else if(use_sec == 'N') {
-		location.href="/blockcom/boardread?bf_idx="+bf_idx;
+		location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";
 	}
 };

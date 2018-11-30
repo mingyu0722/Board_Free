@@ -10,10 +10,32 @@
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="/blockcom/resources/js/read.js"></script>
+<style>
+
+	#replyTable tr, td {
+		border: 1px solid #ddd;
+		text-align: left;
+	}
+	#replyTable {
+		border-collapse: collapse;
+		width: 600px;
+	}
+	
+	.pagingUl {
+		text-align: center;
+	}
+	.pagingUl li {
+		display: inline-block;
+		color: black;
+		float: middle;
+		padding: 8px 16px;
+		text-decoration: none;
+	}
+</style>
 </head>
 <body>
 <h2>게시글 보기</h2>
-	<table border="1" style="width:600px">
+	<table border="1" id="detail" style="width:600px">
 		<colgroup>
 			<col width='15%' />
 			<col width='*%' />
@@ -97,7 +119,7 @@
 	 	<button type="button" id="reply_btn">확인</button>
 	 	<br></br>
 	 	<c:forEach var="replyList" items="${replyList}">
-	 	<table border="1" style="width:600px" name="replyTable">
+	 	<table border="1" id="replyTable">
 	 		<tr>
 	 			<td rowspan="3">
 	 				<textarea readonly class="bfr_contents_${replyList.bfr_idx}" rows="5" cols="60">${replyList.bfr_contents}</textarea>
@@ -126,5 +148,23 @@
 	 		<input type="hidden" class="mem_idx_${replyList.bfr_idx}" value="${replyList.mem_idx}" />
 	 	</table>
 	 	</c:forEach>
+	 	<ul class="pagingUl">
+		<c:if test="${prev}">
+			<li><a 
+				href='boardread?bf_idx=${read.bf_idx}&rpage=${rpage - 1}'>
+				&laquo;
+				</a>
+			</li>
+		</c:if>
+		<c:forEach begin="${startPage}" end="${endPage}" var="idx">
+			<li
+				class='<c:out value="${idx == rpage? 'current':''}" />'>
+				<a href='boardread?bf_idx=${read.bf_idx}&rpage=${idx}'>${idx}</a>
+			</li>
+		</c:forEach>
+		<c:if test="${next}">
+			<li><a href='boardread?bf_idx=${read.bf_idx}&rpage=${rpage + 1}'>&raquo;</a></li>
+		</c:if>
+		</ul>
 </body>
 </html>

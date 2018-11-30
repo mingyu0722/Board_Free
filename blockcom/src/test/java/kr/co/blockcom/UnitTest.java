@@ -83,11 +83,11 @@ public class UnitTest {
 		
 	}*/
 	
-	@Test
+	/*@Test
 	public void replyListTest() throws Exception {
 		List<ReplyVO> replyList = boardService.replyList(3);
 		Assert.assertEquals(3, replyList.size());
-	}
+	}*/
 	
 	@Test
 	public void replyUpdateTest() throws Exception {

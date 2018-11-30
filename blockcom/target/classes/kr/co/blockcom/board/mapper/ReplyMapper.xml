@@ -3,6 +3,18 @@
 <mapper namespace="kr.co.blockcom.board.mapper.ReplyMapper">
 
 	<!-- Reply -->
+	<!-- Total Reply List -->
+	<select id="totalCount" resultType="int">
+		SELECT 
+	   		COUNT(*) 
+	   		FROM 
+	   			board_free_reply
+       		WHERE 
+       			board_free_reply.bf_idx = #{bf_idx}
+       		AND 
+       			board_free_reply.use_flag = 'Y';
+	</select>
+	
 	<select id="replyList" resultType="kr.co.blockcom.board.vo.BoardVO"> <!-- select를 할때는 result type 반드시!! -->
 		SELECT 
 			bfr.bfr_idx, 
@@ -20,7 +32,9 @@
 		AND 
 			mb.mem_idx = bfr.mem_idx
 		AND 
-			bfr.bf_idx = #{bf_idx};
+			bfr.bf_idx = #{bf_idx}
+		LIMIT 
+			#{listStart}, #{perPageNumber};	
 	</select>
 	
 	<update id="replyUpdate">

@@ -63,8 +63,9 @@ public class BoardController {
 		pvo.setPerPageNumber(perPageNumber);
 		pvo.setBlockSize(blockSize);
 		
-		int totalCount = boardService.totalCount(pvo);
-		pvo.setTotalCount(totalCount);
+		
+		/*int totalCount = boardService.totalCount(pvo);
+		pvo.setTotalCount(totalCount);*/
 		
 		List<PagingVO> list = boardService.listAll(pvo);
 		
@@ -77,7 +78,7 @@ public class BoardController {
 		/*mav.addObject("recList", recList);*/
 		mav.addObject("bf_cate_idx", bf_cate_idx);					//bf_cate_idx 1,default = 자유게시판, 2 = 공지사항  
 		mav.addObject("memIdx", session.getAttribute("mem_idx"));	//member 선택 시 세션에 등록된 mem_idx
-		mav.addObject("totalCount", totalCount);
+		mav.addObject("totalCount", pvo.getTotalCount());
 		mav.addObject("page", pvo.getPage());
 		mav.addObject("startPage", pvo.getStartPage());
 		mav.addObject("endPage", pvo.getTempEndPage());
@@ -120,15 +121,20 @@ public class BoardController {
 	
 	@GetMapping(value="/boardread")
 	//bf_idx에 해당하는 글과 댓글을 DB 요청 후 view로 전달. replyList는 해당 idx에 있는 모든 것을 출력하므로 List로 받은 후 List객체를 전달.
-	public ModelAndView view(@RequestParam int bf_idx, HttpSession session) throws Exception {
+	public ModelAndView view(@RequestParam int bf_idx, @RequestParam int rpage, HttpSession session) throws Exception {
 		
 		int currentMemeberIdx = (Integer) session.getAttribute("mem_idx");
 		BoardVO vo = boardService.read(bf_idx);
 		ModelAndView mav = new ModelAndView();
-		List<ReplyVO> replyList = boardService.replyList(bf_idx);
+		
+		ReplyVO rvo = new ReplyVO();
+		rvo.setBf_idx(bf_idx);
+		rvo.setPage(rpage);
+		rvo.setPerPageNumber(5);
+		rvo.setBlockSize(5);
+		List<ReplyVO> replyList = boardService.replyList(rvo);
 		String use_sec = vo.getUse_sec();
 		mav.setViewName("read");
-		System.out.println(use_sec);
 		if(use_sec.equals("Y")) {
 			if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
 				mav.addObject("read", vo);
@@ -136,6 +142,11 @@ public class BoardController {
 				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 				mav.addObject("replyList", replyList);
 				mav.addObject("memIdx", currentMemeberIdx);
+				mav.addObject("rpage", rvo.getPage());
+				mav.addObject("startPage", rvo.getStartPage());
+				mav.addObject("endPage", rvo.getTempEndPage());
+				mav.addObject("prev", rvo.isPrev());
+				mav.addObject("next", rvo.isNext());
 				boardService.viewCnt(bf_idx, session);
 				return mav;
 			}
@@ -153,6 +164,11 @@ public class BoardController {
 			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 			mav.addObject("replyList", replyList);
 			mav.addObject("memIdx", currentMemeberIdx);
+			mav.addObject("rpage", rvo.getPage());
+			mav.addObject("startPage", rvo.getStartPage());
+			mav.addObject("endPage", rvo.getTempEndPage());
+			mav.addObject("prev", rvo.isPrev());
+			mav.addObject("next", rvo.isNext());
 			boardService.viewCnt(bf_idx, session);
 			return mav;
 		}

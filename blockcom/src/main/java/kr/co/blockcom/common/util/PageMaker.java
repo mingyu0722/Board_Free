@@ -2,7 +2,7 @@ package kr.co.blockcom.common.util;
 
 import kr.co.blockcom.board.vo.PagingVO;
 
-public class PageMaker {
+public class PageMaker<T extends PagingVO> {
 	
 	public PageMaker(PagingVO pvo) {
 		

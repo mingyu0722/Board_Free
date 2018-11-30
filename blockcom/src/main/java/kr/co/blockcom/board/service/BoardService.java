@@ -46,7 +46,7 @@ public interface BoardService {
 	public void viewCnt(int bf_idx, HttpSession session) throws Exception;
 	
 	//Reply List
-	public List<ReplyVO> replyList(int bf_idx) throws Exception;
+	public List<ReplyVO> replyList(ReplyVO rvo) throws Exception;
 	
 	//Reply Update
 	public boolean replyUpdate(ReplyVO vo) throws Exception;

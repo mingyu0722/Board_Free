@@ -5,11 +5,9 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class ReplyVO {
+public class ReplyVO extends PagingVO {
 	
-	private int bf_idx;
 	private int bfr_idx;
-	private int mem_idx;
 	private String bfr_contents;
 	private String mem_name;
 	private Date reg_date;

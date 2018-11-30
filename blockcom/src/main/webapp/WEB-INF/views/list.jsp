@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%> <!-- c:forEach 사용하기위한 태그 -->
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
 
@@ -11,12 +11,23 @@
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
 <script src="/blockcom/resources/js/list.js"></script>
 <style>
-	.pagingUl li {
-		display: inline-block;
+	#list tr, td {
+		border: 1px solid #ddd;
+		text-align: left;
+		padding: 15px;
+	}
+	#list {
+		border-collapse: collapse;
+		width: 100%;
+	}
+	
+	.pagingUl {
+		text-align: center;
 	}
 	.pagingUl li {
+		display: inline-block;
 		color: black;
-		float: left;
+		float: middle;
 		padding: 8px 16px;
 		text-decoration: none;
 	}
@@ -40,8 +51,13 @@
 	</span>
 	<button type="button" id="searchBtn" class="btn_m btn_type3 bt_srch">검색</button>
 	<br></br>
+	<select id="listCondition" onchange="ListCondition()">
+		<option value="1">10개씩 보기</option>
+		<option value="2">20개씩 보기</option>
+	</select>
+	</span>
 	전체 글 : ${totalCount}
-	<table  border="1" id="list" name="list" style="width:800px">
+	<table  border="1" id="list" name="list">
 		<colgroup>
 			<col width='8%' />
 			<col width='*%' />
