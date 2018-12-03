@@ -227,7 +227,7 @@
 	
 	<select id="recommend_flag" resultType="int">
 		SELECT
-			*
+			count(*)
 			FROM
 				recommend
 			WHERE
@@ -235,6 +235,16 @@
 			AND
 				mem_idx = #{mem_idx};
 	</select>
+	
+	<delete id="del_recommend">
+		DELETE
+			FROM
+				recommend
+			WHERE
+				bf_idx = #{bf_idx}
+			AND
+				mem_idx = #{mem_idx};
+	</delete>
 	
 	<!-- PreArticle & NextArticle -->
 	<select id="preArticle" resultType="kr.co.blockcom.board.vo.BoardVO">

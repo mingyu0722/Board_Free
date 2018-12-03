@@ -15,6 +15,7 @@ import kr.co.blockcom.board.mapper.BoardMapper;
 import kr.co.blockcom.board.mapper.MemberMapper;
 import kr.co.blockcom.board.mapper.ReplyMapper;
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.FileVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
@@ -102,6 +103,14 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean recommend_flag(BoardVO vo) throws Exception {
 		if(boardMapper.recommend_flag(vo) > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean delRecommend(BoardVO vo) throws Exception {
+		if(boardMapper.del_recommend(vo) > 0)
 			return true;
 		else
 			return false;

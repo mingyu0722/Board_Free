@@ -28,7 +28,23 @@
 					<td>내용</td>
 					<td><textarea id="bf_contents" name="bf_contents" rows="6" cols="70"></textarea></td> 
 					<script>
-						CKEDITOR.replace('bf_contents', {enterMode:'2'});
+						CKEDITOR.replace('bf_contents', {
+							enterMode:'2',
+							filebrowserImageUploadUrl: '/blockcom/boardwrite'
+						});
+						
+						CKEDITOR.on('dialogDefinition', function(ev) {
+							var dialogName = ev.data.name;
+							var dialogDefinition = ev.data.definition;
+							
+							switch (dialogName) {
+								case 'image': //Image Properties dialog
+								//dialogDefinition.removeContents('info');
+								dialogDefinition.removeContents('Link');
+								dialogDefinition.removeContents('advanced');
+								break;
+							}
+						});
 					</script>
 				</tr>
 			</tbody>

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.FileVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
@@ -35,6 +36,9 @@ public interface BoardService {
 	//Recommend Flag Confirm
 	public boolean recommend_flag(BoardVO vo) throws Exception;
 	
+	//Recommend Delete
+	public boolean delRecommend(BoardVO vo) throws Exception;
+	
 	//Previous Article
 	public BoardVO preArticle(int bf_idx) throws Exception;
 	
@@ -45,7 +49,6 @@ public interface BoardService {
 	public boolean delete(int bf_idx) throws Exception;
 	
 	//Update
-	//public void update(BoardVO vo) throws Exception;
 	public boolean update(BoardVO vo) throws Exception;
 	
 	//Reply List

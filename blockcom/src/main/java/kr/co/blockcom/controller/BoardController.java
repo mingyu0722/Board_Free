@@ -2,6 +2,8 @@ package kr.co.blockcom.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.blockcom.board.service.BoardService;
@@ -112,7 +115,7 @@ public class BoardController {
 	
 	@PostMapping(value="/boardwrite")
 	//view에서 입력된 데이터를 vo객체에 담아 DB로 전달.
-	public @ResponseBody String insert(@ModelAttribute BoardVO vo) throws Exception {		//@ModelAttribute 파라미터 값을 확인하여 데이터를 getter/setter에 의해 데이터를 바인딩 해줌
+	public @ResponseBody String insert(@ModelAttribute BoardVO vo) throws Exception {
 		if(boardService.write(vo) == true) 
 			return "true";
 		else
@@ -127,7 +130,7 @@ public class BoardController {
 		BoardVO vo = new BoardVO();
 		vo.setBf_idx(bf_idx);
 		vo.setMem_idx(currentMemeberIdx);
-		vo = boardService.read(vo);
+		BoardVO readVo = boardService.read(vo);
 		
 		ReplyVO rvo = new ReplyVO();
 		rvo.setBf_idx(bf_idx);
@@ -136,47 +139,70 @@ public class BoardController {
 		rvo.setBlockSize(5);
 		
 		List<ReplyVO> replyList = boardService.replyList(rvo);
-		String use_sec = vo.getUse_sec();
+		String use_sec = readVo.getUse_sec();
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("read");
+		
 		if(use_sec.equals("Y")) {
-			if(currentMemeberIdx == vo.getMem_idx() || currentMemeberIdx == 1) {
-				mav.addObject("read", vo);
-				mav.addObject("preArticle", boardService.preArticle(bf_idx));
-				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
-				mav.addObject("replyList", replyList);
-				mav.addObject("memIdx", currentMemeberIdx);
-				mav.addObject("rec_flag", boardService.recommend_flag(vo));
-				mav.addObject("rpage", rvo.getPage());
-				mav.addObject("startPage", rvo.getStartPage());
-				mav.addObject("endPage", rvo.getTempEndPage());
-				mav.addObject("prev", rvo.isPrev());
-				mav.addObject("next", rvo.isNext());
-				return mav;
-			}
-			else {
+			if(currentMemeberIdx != readVo.getMem_idx() && currentMemeberIdx != 1) {
 				vo.setBf_contents("비밀글입니다.");
 				mav.addObject("read", vo);
 				return mav;
 			}	
 		}
 		
-		else{
-			mav.setViewName("read");
-			mav.addObject("read", vo);
-			mav.addObject("preArticle", boardService.preArticle(bf_idx));
-			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
-			mav.addObject("replyList", replyList);
-			mav.addObject("memIdx", currentMemeberIdx);
-			mav.addObject("rec_flag", boardService.recommend_flag(vo));
-			mav.addObject("rpage", rvo.getPage());
-			mav.addObject("startPage", rvo.getStartPage());
-			mav.addObject("endPage", rvo.getTempEndPage());
-			mav.addObject("prev", rvo.isPrev());
-			mav.addObject("next", rvo.isNext());
-			return mav;
-		}
+		mav.addObject("read", readVo);
+		mav.addObject("preArticle", boardService.preArticle(bf_idx));
+		mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+		mav.addObject("replyList", replyList);
+		mav.addObject("memIdx", currentMemeberIdx);
+		mav.addObject("rec_flag", boardService.recommend_flag(vo));
+		mav.addObject("rpage", rvo.getPage());
+		mav.addObject("startPage", rvo.getStartPage());
+		mav.addObject("endPage", rvo.getTempEndPage());
+		mav.addObject("prev", rvo.isPrev());
+		mav.addObject("next", rvo.isNext());
+		return mav;
+
+		
+//		if(use_sec.equals("Y")) {
+//			if(currentMemeberIdx == readVo.getMem_idx() || currentMemeberIdx == 1) {
+//				mav.addObject("read", readVo);
+//				mav.addObject("preArticle", boardService.preArticle(bf_idx));
+//				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+//				mav.addObject("replyList", replyList);
+//				mav.addObject("memIdx", currentMemeberIdx);
+//				mav.addObject("rec_flag", boardService.recommend_flag(vo));
+//				mav.addObject("rpage", rvo.getPage());
+//				mav.addObject("startPage", rvo.getStartPage());
+//				mav.addObject("endPage", rvo.getTempEndPage());
+//				mav.addObject("prev", rvo.isPrev());
+//				mav.addObject("next", rvo.isNext());
+//				return mav;
+//			}
+//			else {
+//				vo.setBf_contents("비밀글입니다.");
+//				mav.addObject("read", vo);
+//				return mav;
+//			}	
+//		}
+//		
+//		else{
+//			mav.setViewName("read");
+//			mav.addObject("read", readVo);
+//			mav.addObject("preArticle", boardService.preArticle(bf_idx));
+//			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+//			mav.addObject("replyList", replyList);
+//			mav.addObject("memIdx", currentMemeberIdx);
+//			mav.addObject("rec_flag", boardService.recommend_flag(vo));
+//			mav.addObject("rpage", rvo.getPage());
+//			mav.addObject("startPage", rvo.getStartPage());
+//			mav.addObject("endPage", rvo.getTempEndPage());
+//			mav.addObject("prev", rvo.isPrev());
+//			mav.addObject("next", rvo.isNext());
+//			return mav;
+//		}
 	}
 	
 	@PostMapping(value="/boardread")
@@ -198,6 +224,15 @@ public class BoardController {
 		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
 		vo.setMem_idx(currentMemeberIdx);
 		boardService.recommend(vo);
+	}
+	
+	@PostMapping(value="/delRecommend")
+	public @ResponseBody boolean delRecommend(@ModelAttribute BoardVO vo) throws Exception {
+		if(boardService.delRecommend(vo))
+			return true;
+		else
+			return false;
+
 	}
 	
 	@GetMapping(value="/boardupdate")

@@ -63,6 +63,13 @@ public interface BoardMapper {
 		public int recommend_flag(BoardVO vo) throws Exception;
 		
 		/**
+		 * 추천 취소
+		 * @param vo
+		 * @throws Exception
+		 */
+		public int del_recommend(BoardVO vo) throws Exception;
+		
+		/**
 		 * 이전글
 		 * @param bf_idx
 		 * @return BoardVO

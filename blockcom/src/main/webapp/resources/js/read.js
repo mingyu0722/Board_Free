@@ -2,7 +2,7 @@ $(function(){
 	
 	
 	$("#btn_list").click(function(){
-		location.href="/blockcom/boardlist?bf_cate_idx="+$("#bf_cate_idx").val()+"&page=1&perPageNumber=10&pageNumber=5";
+		location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&pageNumber=5";
 	})
 	$("#btn_update").click(function(){
 		location.href="/blockcom/boardupdate?bf_idx="+$("#bf_idx").val();
@@ -34,10 +34,10 @@ $(function(){
 });
 
 function recommend() {
-	if($("#recommend").is(":checked")) {
+	if($("#recommend").prop("checked", true)) {
 		var data = {};
 		data["bf_idx"] = $("#bf_idx").val();
-		data["mem_idx"] = $("#mem_idx").val();
+		data["mem_idx"] = $("#memIdx").val();
 		
 		$.ajax({
 			type : "POST",
@@ -45,6 +45,30 @@ function recommend() {
 			data : data,
 			success : function(response){
 				alert("추천되었습니다.");
+				location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
+				return;
+			},
+			error : function(response){ 
+				console.log('error');
+				return;
+			}
+		});
+	}
+}
+
+function delRecommend() {
+	if($("#recommend").prop('checked', false)) {
+		var data = {};
+		data["bf_idx"] = $("#bf_idx").val();
+		data["mem_idx"] = $("#memIdx").val();
+		
+		$.ajax({
+			type : "POST",
+			url : "/blockcom/delRecommend",
+			data : data,
+			success : function(response){
+				alert("추천이 취소되었습니다.");
+				location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 				return;
 			},
 			error : function(response){ 

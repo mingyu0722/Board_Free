@@ -78,7 +78,9 @@
 			</c:when>
 			<c:otherwise></c:otherwise>
 		</c:choose>
-	<input type="checkbox" id="recommend" onchange="recommend()">추천</>
+	<c:set var="rec_flag" value="${rec_flag}" />
+		<c:if test="${rec_flag}"><input type="checkbox" id="recommend" checked="checked" onchange="delRecommend()">추천</></c:if>
+		<c:if test="${rec_flag eq false}"><input type="checkbox" id="recommend" onchange="recommend()">추천</></c:if>
 	<br></br>
 	<table border="1" style="width:600px" name="preNextArticle">
 		<tr>

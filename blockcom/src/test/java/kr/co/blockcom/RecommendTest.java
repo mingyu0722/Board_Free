@@ -25,7 +25,7 @@ public class RecommendTest {
 	@Autowired
 	private BoardMapper mapper;
 	
-	@Test
+	/*@Test
 	public void recommendTest() throws Exception {
 		BoardVO vo = new BoardVO();
 		vo.setBf_idx(38);
@@ -34,5 +34,5 @@ public class RecommendTest {
 		
 		System.out.println(mapper.recommend_flag(vo));
 	}
-	
+	*/
 }
