@@ -12,7 +12,7 @@
 </head>
 <body>
 	<h2>게시글 작성</h2>
-	<form id="form" name="form" method="post" action="boardwrite" accept-charset="UTF-8">
+	<form id="form" name="form" method="post" action="boardwrite" accept-charset="UTF-8" enctype="multipart/form-data">
 		<p>비밀글<input type="checkbox" id="selectSecure" name="selectSecure" /></p>		
 		<table border="1" style="width: 650px;">
 			<colgroup>
@@ -26,26 +26,16 @@
 				</tr>
 				<tr>
 					<td>내용</td>
-					<td><textarea id="bf_contents" name="bf_contents" rows="6" cols="70"></textarea></td> 
+					<td><textarea id="bf_contents" rows="6" cols="70"></textarea></td> 
 					<script>
 						CKEDITOR.replace('bf_contents', {
 							enterMode:'2',
-							filebrowserImageUploadUrl: '/blockcom/file'
-						});
-						
-						CKEDITOR.on('dialogDefinition', function(ev) {
-							var dialogName = ev.data.name;
-							var dialogDefinition = ev.data.definition;
-							
-							switch (dialogName) {
-								case 'image': //Image Properties dialog
-								//dialogDefinition.removeContents('info');
-								dialogDefinition.removeContents('Link');
-								dialogDefinition.removeContents('advanced');
-								break;
-							}
 						});
 					</script>
+				</tr>
+				<tr>
+					<td>파일첨부</td>
+					<td><input type="file" id="file" name="file"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -53,8 +43,8 @@
 			<button type="button" id="btn_save">확인</button>
 			<button type="button" id="btn_cancel">취소</button>
 		</div>
-		<input type="hidden" id="bf_cate_idx" value="${bf_cate_idx}" />
-		<input type="hidden" id="mem_idx" value="${mem_idx}" />
+		<input type="hidden" id="bf_cate_idx" name="bf_cate_idx" value="${bf_cate_idx}" />
+		<input type="hidden" id="mem_idx" name="mem_idx" value="${mem_idx}" />
 	</form>
 </body>
 </html>

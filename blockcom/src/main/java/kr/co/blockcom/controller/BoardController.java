@@ -1,5 +1,6 @@
 package kr.co.blockcom.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
+import kr.co.blockcom.board.vo.UploadVO;
 
 @Controller
 @RequestMapping("/")
@@ -112,14 +114,21 @@ public class BoardController {
 	
 	@PostMapping(value="/boardwrite")
 	//view에서 입력된 데이터를 vo객체에 담아 DB로 전달.
-	public @ResponseBody String insert(@ModelAttribute BoardVO vo) throws Exception {
+	public @ResponseBody String insert(@ModelAttribute UploadVO uvo) throws Exception {
+		System.out.println(uvo.getFile().getOriginalFilename());
+		BoardVO vo = new BoardVO();
+		vo.setBf_cate_idx(uvo.getBf_cate_idx());
+		vo.setBf_title(uvo.getBf_title());
+		vo.setBf_contents(uvo.getBf_contents());
+		vo.setMem_idx(uvo.getMem_idx());
+		vo.setUse_sec(uvo.getUse_sec());
 		
 		if(boardService.write(vo) == true) 
 			return "true";
 		else
 			return "false";
 	}
-	
+
 	@GetMapping(value="/boardread")
 	//bf_idx에 해당하는 글과 댓글을 DB 요청 후 view로 전달. replyList는 해당 idx에 있는 모든 것을 출력하므로 List로 받은 후 List객체를 전달.
 	public ModelAndView view(@RequestParam int bf_idx, @RequestParam int rpage, HttpSession session) throws Exception {

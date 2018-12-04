@@ -25,4 +25,5 @@ public class BoardVO {
 	private int replyCnt;
 	private String searchCondition;
 	private String searchValue;
+	
 } 

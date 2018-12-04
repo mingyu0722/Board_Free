@@ -113,10 +113,7 @@
 	 			<input type="hidden" id="pre_use_sec" value="${preArticle.use_sec}" />
 	 			<input type="hidden" id="pre_bf_idx" value="${preArticle.bf_idx}" /> 
 	 		</tr>
-	 	</table>
-	 	<c:set var="rec_flag" value="${rec_flag}" />
-			<c:if test="${rec_flag}"><p>님 이미 추천함</p></c:if>
-	 	
+	 	</table>	 	
 	 <br>
 	 <h3>댓글</h3>
 	 	<textarea id="bfr_contents" rows="4" cols="80" placeholder="댓글 입력(최대 300자)"></textarea>

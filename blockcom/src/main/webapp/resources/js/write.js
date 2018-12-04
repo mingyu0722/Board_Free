@@ -10,20 +10,22 @@ $(function(){
 			$("#bf_contents").focus();
 			return;
 		}
-		var data = {};
-		data["bf_title"] = $("#bf_title").val();
-		data["bf_contents"] = CKEDITOR.instances.bf_contents.getData();
-		data["bf_cate_idx"] = $("#bf_cate_idx").val();
-		data["mem_idx"] = $("#mem_idx").val();
-		data["use_sec"] = 'N';
+		
+		var formData = new FormData($("#form")[0]);
+		formData.append("bf_contents", CKEDITOR.instances.bf_contents.getData());
+		
 		if($("#selectSecure").is(":checked")) {
-			data["use_sec"] = 'Y';
+			formData.append("use_sec", 'Y');
+		} else {
+			formData.append("use_sec", 'N');
 		}
 		
 		$.ajax({
 			type : "POST",
 			url  : "/blockcom/boardwrite",
-			data : data,
+			data : formData,
+			processData : false,
+            contentType : false,
 			success : function(response){
 				if(response == "true") {
 					alert("게시물이 등록되었습니다.");
