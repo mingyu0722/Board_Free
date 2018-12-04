@@ -11,9 +11,8 @@ public class FileVO {
 	private int bf_idx;
 	private int mem_idx;
 	private String file_path;
+	private String file_name;
 	private int file_size;
-	private Date reg_date;
-	private Date mod_date;
 	private String use_flag; 
 	
 }

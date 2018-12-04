@@ -30,7 +30,7 @@
 					<script>
 						CKEDITOR.replace('bf_contents', {
 							enterMode:'2',
-							filebrowserImageUploadUrl: '/blockcom/boardwrite'
+							filebrowserImageUploadUrl: '/blockcom/file'
 						});
 						
 						CKEDITOR.on('dialogDefinition', function(ev) {

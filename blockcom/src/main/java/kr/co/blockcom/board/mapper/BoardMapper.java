@@ -11,9 +11,6 @@ import kr.co.blockcom.board.vo.ReplyVO;
 
 @Repository
 public interface BoardMapper {
-
-		/*//Recommended List
-		public List<BoardVO> recList(BoardVO vo) throws Exception;*/
 		
 		/**
 		 * 게시물 전체 개수
@@ -24,9 +21,17 @@ public interface BoardMapper {
 		public int totalCount(PagingVO vo) throws Exception;
 		
 		/**
+		 * 추천글
+		 * @param bf_cate_idx
+		 * @return List<BoardVO>
+		 * @throws Exception
+		 */
+		public List<BoardVO> recommendedList(int bf_cate_idx) throws Exception;
+		
+		/**
 		 * 전체 게시물
 		 * @param PagingVO
-		 * @return
+		 * @return List<PagingVO>
 		 * @throws Exception
 		 */
 		public List<PagingVO> listAll(PagingVO vo) throws Exception;

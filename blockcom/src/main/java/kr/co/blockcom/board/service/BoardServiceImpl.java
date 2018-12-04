@@ -1,17 +1,28 @@
 package kr.co.blockcom.board.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /*import kr.co.blockcom.board.dao.BoardDao;
 import kr.co.blockcom.board.dao.MemberDao;
 import kr.co.blockcom.board.dao.ReplyDao;*/
 import kr.co.blockcom.board.mapper.BoardMapper;
+import kr.co.blockcom.board.mapper.FileMapper;
 import kr.co.blockcom.board.mapper.MemberMapper;
 import kr.co.blockcom.board.mapper.ReplyMapper;
 import kr.co.blockcom.board.vo.BoardVO;
@@ -29,6 +40,7 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardMapper boardMapper;
 	private final MemberMapper memberMapper;
 	private final ReplyMapper replyMapper;
+	private final FileMapper fileMapper; 
 	
 	@Override
 	public List<MemberVO> member() throws Exception {
@@ -40,10 +52,9 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.totalCount(vo);
 	}
 	
-	/*@Override
-	public List<BoardVO> recList(BoardVO vo) throws Exception {
-		return boardDao.recList(vo);
-	}*/
+	public List<BoardVO> recommendedList(int bf_cate_idx) throws Exception {
+		return boardMapper.recommendedList(bf_cate_idx);
+	}
 	
 	@Override
 	public List<PagingVO> listAll(PagingVO pvo) throws Exception {

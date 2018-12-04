@@ -2,7 +2,11 @@ package kr.co.blockcom.board.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.blockcom.board.vo.BoardVO;
 import kr.co.blockcom.board.vo.FileVO;
@@ -18,8 +22,8 @@ public interface BoardService {
 	//Total Count
 	public int totalCount(PagingVO vo) throws Exception;
 	
-	/*//Recommended List
-	public List<BoardVO> recList(BoardVO vo) throws Exception;*/
+	//Recommended List
+	public List<BoardVO> recommendedList(int bf_cate_idx) throws Exception;
 	
 	//List
 	public List<PagingVO> listAll(PagingVO vo) throws Exception;

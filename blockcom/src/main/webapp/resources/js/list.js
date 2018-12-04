@@ -49,10 +49,18 @@ $(function(){
  		var searchCondition = $("#searchCondition").val();
  		var searchValue = $("#searchValue").val();
  		var bf_cate_idx = $("#bf_cate_idx").val();
- 			
  		location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&blockSize=5";
  	});
 });
+
+function ListCondition() {
+	var searchCondition = $("#searchCondition").val();
+	var searchValue = $("#searchValue").val();
+	var bf_cate_idx = $("#bf_cate_idx").val();
+	var perPageNumber = $("#listCondition").val();
+	location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber="+perPageNumber+"&blockSize=5";
+}
+
 function EnterFunc() {
 	if(event.keyCode == 13) {
 		var searchCondition = $("#searchCondition").val();

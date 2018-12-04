@@ -1,5 +1,6 @@
 package kr.co.blockcom.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ResultSetSupportingSqlParameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,14 +52,15 @@ public class BoardController {
 		session.setAttribute("mem_idx", Integer.parseInt(mem_idx));
 		return "Success";
 	}
-		
+	
 	@GetMapping(value="/boardlist")
 	//DB의 board_free table 데이터를 받아 view에 전달.
 	public ModelAndView list(@RequestParam int bf_cate_idx, @RequestParam(defaultValue="") String searchCondition, @RequestParam(defaultValue="") String searchValue,
-			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="5") int perPageNumber, @RequestParam(defaultValue="5") int blockSize, HttpSession session) 
+			@RequestParam(defaultValue="1") int page, @RequestParam(defaultValue="10") int perPageNumber, @RequestParam(defaultValue="5") int blockSize, HttpSession session) 
 					throws Exception {
 		
 		PagingVO pvo = new PagingVO();
+		BoardVO vo = new BoardVO();
 		
 		pvo.setBf_cate_idx(bf_cate_idx);
 		pvo.setSearchCondition(searchCondition);
@@ -66,19 +69,13 @@ public class BoardController {
 		pvo.setPerPageNumber(perPageNumber);
 		pvo.setBlockSize(blockSize);
 		
-		
-		/*int totalCount = boardService.totalCount(pvo);
-		pvo.setTotalCount(totalCount);*/
-		
+		List<BoardVO> recList = boardService.recommendedList(bf_cate_idx);
 		List<PagingVO> list = boardService.listAll(pvo);
-		
-		/*recVo.setBf_cate_idx(bf_cate_idx);
-		List<BoardVO> recList = boardService.recList(recVo);*/
 
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("list");		//(jsp filename)
 		mav.addObject("list", list);	//(jsp var, return var)
-		/*mav.addObject("recList", recList);*/
+		mav.addObject("recList", recList);
 		mav.addObject("bf_cate_idx", bf_cate_idx);					//bf_cate_idx 1,default = 자유게시판, 2 = 공지사항  
 		mav.addObject("memIdx", session.getAttribute("mem_idx"));	//member 선택 시 세션에 등록된 mem_idx
 		mav.addObject("totalCount", pvo.getTotalCount());
@@ -116,6 +113,7 @@ public class BoardController {
 	@PostMapping(value="/boardwrite")
 	//view에서 입력된 데이터를 vo객체에 담아 DB로 전달.
 	public @ResponseBody String insert(@ModelAttribute BoardVO vo) throws Exception {
+		
 		if(boardService.write(vo) == true) 
 			return "true";
 		else
@@ -164,45 +162,6 @@ public class BoardController {
 		mav.addObject("prev", rvo.isPrev());
 		mav.addObject("next", rvo.isNext());
 		return mav;
-
-		
-//		if(use_sec.equals("Y")) {
-//			if(currentMemeberIdx == readVo.getMem_idx() || currentMemeberIdx == 1) {
-//				mav.addObject("read", readVo);
-//				mav.addObject("preArticle", boardService.preArticle(bf_idx));
-//				mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
-//				mav.addObject("replyList", replyList);
-//				mav.addObject("memIdx", currentMemeberIdx);
-//				mav.addObject("rec_flag", boardService.recommend_flag(vo));
-//				mav.addObject("rpage", rvo.getPage());
-//				mav.addObject("startPage", rvo.getStartPage());
-//				mav.addObject("endPage", rvo.getTempEndPage());
-//				mav.addObject("prev", rvo.isPrev());
-//				mav.addObject("next", rvo.isNext());
-//				return mav;
-//			}
-//			else {
-//				vo.setBf_contents("비밀글입니다.");
-//				mav.addObject("read", vo);
-//				return mav;
-//			}	
-//		}
-//		
-//		else{
-//			mav.setViewName("read");
-//			mav.addObject("read", readVo);
-//			mav.addObject("preArticle", boardService.preArticle(bf_idx));
-//			mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
-//			mav.addObject("replyList", replyList);
-//			mav.addObject("memIdx", currentMemeberIdx);
-//			mav.addObject("rec_flag", boardService.recommend_flag(vo));
-//			mav.addObject("rpage", rvo.getPage());
-//			mav.addObject("startPage", rvo.getStartPage());
-//			mav.addObject("endPage", rvo.getTempEndPage());
-//			mav.addObject("prev", rvo.isPrev());
-//			mav.addObject("next", rvo.isNext());
-//			return mav;
-//		}
 	}
 	
 	@PostMapping(value="/boardread")

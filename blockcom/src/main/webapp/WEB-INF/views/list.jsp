@@ -50,10 +50,11 @@
 		<input type="text" name="searchValue" id="searchValue" class="i_text" onKeyPress="EnterFunc();"/>
 	</span>
 	<button type="button" id="searchBtn" class="btn_m btn_type3 bt_srch">검색</button>
-	<br></br>
+	<br></br>	
 	<select id="listCondition" onchange="ListCondition()">
-		<option value="1">10개씩 보기</option>
-		<option value="2">20개씩 보기</option>
+		<option value="">게시글 수</option>
+		<option value="10">10개씩 보기</option>
+		<option value="20">20개씩 보기</option>
 	</select>
 	</span>
 	전체 글 : ${totalCount}
@@ -75,13 +76,25 @@
 			</tr>
 		</thead>
 		<tbody>
-		<%-- <c:forEach var="row" items="${recList}">
+		<c:forEach var="row" items="${recList}">
 			<tr>
-				<td><span style="color:blue">추천</span></td>
+				<td><span style="color:red">추천</span></td>
 				<td style="display:none">${row.bf_idx}</td>
  				<c:set var="use_sec" value="${row.use_sec}" /> 				
-				<c:if test="${use_sec == 'Y' }"><td>(비밀글)${row.bf_title} [${row.replyCnt}]</td></c:if>
-				<c:if test="${use_sec == 'N' }"><td>${row.bf_title} [${row.replyCnt}]</td></c:if>
+				<c:if test="${use_sec == 'Y' }">
+					<td>
+						<a href="#">
+						(비밀글)${row.bf_title} [${row.replyCnt}]
+						</a>						
+					</td>
+				</c:if>
+				<c:if test="${use_sec == 'N' }">
+					<td>
+						<a href="#">
+						${row.bf_title} [${row.replyCnt}]
+						</a>
+					</td>
+				</c:if>
  				<td style="display:none">${row.mem_idx}</td>
 				<td>${row.mem_name}</td>
 				<c:set var="date" value="${row.mod_date}" />
@@ -91,7 +104,7 @@
 				<td style="display:none">${row.use_sec}</td>
 				<td style="display:none">${row.mem_idx}</td>
 			</tr>
-		</c:forEach> --%>
+		</c:forEach>
 		<c:forEach var="row" items="${list}">
 			<tr>
 				<td>${row.RNUM} </td>
