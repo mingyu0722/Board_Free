@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import kr.co.blockcom.board.service.BoardService;
 import kr.co.blockcom.board.vo.BoardVO;
+import kr.co.blockcom.board.vo.FileVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
@@ -115,18 +116,24 @@ public class BoardController {
 	@PostMapping(value="/boardwrite")
 	//view에서 입력된 데이터를 vo객체에 담아 DB로 전달.
 	public @ResponseBody String insert(@ModelAttribute UploadVO uvo) throws Exception {
-		System.out.println(uvo.getFile().getOriginalFilename());
 		BoardVO vo = new BoardVO();
 		vo.setBf_cate_idx(uvo.getBf_cate_idx());
 		vo.setBf_title(uvo.getBf_title());
 		vo.setBf_contents(uvo.getBf_contents());
 		vo.setMem_idx(uvo.getMem_idx());
 		vo.setUse_sec(uvo.getUse_sec());
-		
-		if(boardService.write(vo) == true) 
-			return "true";
-		else
-			return "false";
+		if(uvo.getFile().getSize() > 0) {
+			if(boardService.write(vo) == true  && boardService.fileUpload(uvo.getFile(), uvo.getMem_idx()) == true)
+				return "true";
+			else
+				return "false";
+		}
+		else {
+			if(boardService.write(vo) == true)
+				return "true";
+			else 
+				return "false";
+		}
 	}
 
 	@GetMapping(value="/boardread")
@@ -139,6 +146,10 @@ public class BoardController {
 		vo.setMem_idx(currentMemeberIdx);
 		BoardVO readVo = boardService.read(vo);
 		
+		FileVO fvo = new FileVO();
+		fvo.setBf_idx(bf_idx);
+		fvo = boardService.fileDown(bf_idx);
+				
 		ReplyVO rvo = new ReplyVO();
 		rvo.setBf_idx(bf_idx);
 		rvo.setPage(rpage);
@@ -160,6 +171,7 @@ public class BoardController {
 		}
 		
 		mav.addObject("read", readVo);
+		mav.addObject("file", fvo);
 		mav.addObject("preArticle", boardService.preArticle(bf_idx));
 		mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
 		mav.addObject("replyList", replyList);
@@ -207,7 +219,9 @@ public class BoardController {
 	//게시글 수정화면에 기본적인 값(작성일자, 작성자, 제목)을 전달.
 	public ModelAndView upView(@RequestParam int bf_idx, HttpSession session) throws Exception {
 		BoardVO vo = new BoardVO();
+		int currentMemeberIdx = (Integer) session.getAttribute("mem_idx");
 		vo.setBf_idx(bf_idx);
+		vo.setMem_idx(currentMemeberIdx);
 		vo = boardService.read(vo);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("update");

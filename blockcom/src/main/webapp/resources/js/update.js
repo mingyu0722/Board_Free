@@ -1,6 +1,6 @@
 $(function(){
 	$("#btn_list").click(function(){
-		location.href="/blockcom/boardlist?bf_cate_idx="+$("#bf_cate_idx").val();
+		location.href="/blockcom/boardlist?bf_cate_idx="+$("#bf_cate_idx").val()+"&page=1&perPageNumber=10&pageNumber=5";
 	});
 	
 	$("#btn_save").click(function(){
@@ -31,7 +31,7 @@ $(function(){
 			success : function(response){
 				if(response == "true") {
 					alert("게시물이 수정되었습니다.");
-					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val();
+					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 				}
 				else if(response == "false")
 					alert("DB Update Error!");
@@ -44,7 +44,7 @@ $(function(){
 	
 	$("#btn_cancel").click(function(){
 		if(confirm("취소하시겠습니까?")) {
-			location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val();
+			location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 		}
 	})
 });

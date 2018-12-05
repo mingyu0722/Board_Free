@@ -8,7 +8,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,6 +32,8 @@ import kr.co.blockcom.board.vo.FileVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
+import kr.co.blockcom.board.vo.UploadVO;
+import kr.co.blockcom.common.util.BoardFileHandler;
 import kr.co.blockcom.common.util.PageMaker;
 import lombok.AllArgsConstructor;
 
@@ -41,6 +45,9 @@ public class BoardServiceImpl implements BoardService {
 	private final MemberMapper memberMapper;
 	private final ReplyMapper replyMapper;
 	private final FileMapper fileMapper; 
+	
+	@Autowired
+	ServletContext servletContext;
 	
 	@Override
 	public List<MemberVO> member() throws Exception {
@@ -101,9 +108,33 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public boolean fileUpload(MultipartFile file, int mem_idx) throws Exception {
+		FileVO fvo = new FileVO();
+		BoardFileHandler boardFileHandler = new BoardFileHandler(file, fvo, servletContext);
+		boardFileHandler.uploadFile();
+		fvo.setMem_idx(mem_idx);
+		if(fileMapper.fileUpload(fvo) > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
 	public BoardVO read(BoardVO vo) throws Exception {
 		boardMapper.viewCnt(vo);
 		return boardMapper.read(vo);
+	}
+	
+	@Override
+	public FileVO fileDown(int bf_idx) throws Exception {
+		FileVO fvo = new FileVO();
+		fvo = fileMapper.fileDown(bf_idx);
+		if(fvo != null) {
+			fvo.setFile_size(fvo.getFile_size() / 1024);
+			return fvo;
+		}
+		else
+			return null;
 	}
 	
 	@Override

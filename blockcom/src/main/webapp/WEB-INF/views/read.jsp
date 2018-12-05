@@ -44,8 +44,8 @@
 			<tr>
 				<td>작성일자</td>
 				<c:set var="date" value="${read.mod_date}" />
-				<c:if test= "${date == null}"><td><fmt:formatDate value="${read.reg_date}" pattern="yyyy-MM-dd a HH:mm" /></td></c:if>
-				<c:if test= "${date != null}"><td><fmt:formatDate value="${read.mod_date}" pattern="yyyy-MM-dd a HH:mm" /></td></c:if>
+				<c:if test="${date == null}"><td><fmt:formatDate value="${read.reg_date}" pattern="yyyy-MM-dd a HH:mm" /></td></c:if>
+				<c:if test="${date != null}"><td><fmt:formatDate value="${read.mod_date}" pattern="yyyy-MM-dd a HH:mm" /></td></c:if>
 				<%-- <td><fmt:formatDate value="${read.reg_date}" pattern="yyyy-MM-dd a HH:mm" /></td> --%>			
 			</tr>
 			<tr>
@@ -58,6 +58,16 @@
 			</tr>
 			<tr>
 				<td colspan="2" style="word-break:break-all; word-wrap:break-word;">${read.bf_contents}</td>
+			</tr>
+			<tr>
+				<td>첨부파일</td>
+				<c:set var="file" value="${file}" />
+				<c:if test="${file == null}"><td >첨부파일 없음</td></c:if>
+				<c:if test="${file != null}">
+					<td>
+						<a href="${file.file_path}" download>${file.file_name}</a>&nbsp<font size="1em">(${file.file_size}KB)</font>
+					</td>
+				</c:if>
 			</tr>
 		</tbody>
 	</table>

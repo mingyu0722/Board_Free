@@ -18,4 +18,12 @@ public interface FileMapper {
 	 */
 	public int fileUpload(FileVO fvo) throws Exception;
 	
+	/**
+	 * 파일 다운로드
+	 * @param FileVO
+	 * @return FileVO
+	 * @throws Exception
+	 */
+	public FileVO fileDown(int bf_idx) throws Exception;
+	
 }

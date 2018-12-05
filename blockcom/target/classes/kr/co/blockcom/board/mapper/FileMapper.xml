@@ -8,24 +8,36 @@
 			INTO 
 				board_free_file
 				(
-					bff_idx, 
 					bf_idx, 
 					mem_idx, 
 					file_path,
 					file_name, 
-					file_size, 
-					use_flag
+					file_size
 				)
 			VALUES 
-				(
-				 	#{bff_idx}, 
-				 	#{bf_idx}, 
+				( 
+				 	(
+				 		SELECT
+				 			MAX(bf_idx)
+				 			FROM
+				 				board_free
+				 	), 
 				 	#{mem_idx},  
 				 	#{file_path}, 
 				 	#{file_name},
-				 	#{file_size},
-				 	#{use_flag}
+				 	#{file_size}
 				);
 	</insert>
+	
+	<select id="fileDown" resultType="kr.co.blockcom.board.vo.FileVO">
+		SELECT
+			file_path,
+			file_name,
+			file_size
+		FROM
+			board_free_file
+		WHERE
+			bf_idx = #{bf_idx};
+	</select>
 </mapper>	
 	

@@ -7,12 +7,10 @@ import lombok.Data;
 @Data
 public class FileVO {
 	
-	private int bff_idx;
 	private int bf_idx;
 	private int mem_idx;
 	private String file_path;
 	private String file_name;
 	private int file_size;
-	private String use_flag; 
 	
 }

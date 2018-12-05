@@ -51,10 +51,5 @@
 		<beans:property name="maxUploadSize" value="-1" />
 		<beans:property name="maxInMemorySize" value="-1" />
 	</beans:bean>
-	
-	<!-- <beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="C:\upload">
-		</beans:constructor-arg>
-	</beans:bean> -->
 
 </beans:beans>

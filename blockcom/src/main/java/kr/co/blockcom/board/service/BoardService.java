@@ -13,6 +13,7 @@ import kr.co.blockcom.board.vo.FileVO;
 import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
+import kr.co.blockcom.board.vo.UploadVO;
 
 public interface BoardService {
 	
@@ -31,8 +32,14 @@ public interface BoardService {
 	//Write
 	public boolean write(BoardVO vo) throws Exception;
 	
+	//File Upload
+	public boolean fileUpload(MultipartFile file, int mem_idx) throws Exception;
+	
 	//Read
 	public BoardVO read(BoardVO vo) throws Exception;
+	
+	//File Down
+	public FileVO fileDown(int bf_idx) throws Exception;
 	
 	//Recommend
 	public void recommend(BoardVO vo) throws Exception;
