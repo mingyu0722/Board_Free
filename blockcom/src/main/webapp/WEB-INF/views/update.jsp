@@ -13,9 +13,9 @@
 </head>
 <body>
 <h2>게시글 수정</h2>
-<form id="form" name="form" method="post" action="boardupdate" accept-charset="UTF-8">
+<form id="form" name="form" method="post" action="boardupdate" accept-charset="UTF-8" enctype="multipart/form-data">
 	<p>비밀글<input type="checkbox" id="selectSecure" name="selectSecure" /></p>
-	<table border="1" style="width:600px">
+	<table border="1" id="update" style="width:600px">
 		<colgroup>
 			<col width='15%' />
 			<col width='*%' />
@@ -39,14 +39,36 @@
 				<c:set var="auth" value="${read.bf_contents}" />
 					<tr><c:if test="${auth == '수정할 수 없습니다.'}"><td colspan="2">${read.bf_contents}</td></c:if>
 					<c:if test="${auth != '수정할 수 없습니다.'}">
-						<td colspan="2"><textarea id="bf_contents" name="bf_contents" rows="6" cols="60"></textarea></td>
-						<script>CKEDITOR.replace('bf_contents');</script>
+						<td colspan="2"><textarea id="bf_contents" rows="6" cols="70"></textarea></td> 
+							<script>
+								CKEDITOR.replace('bf_contents', {
+									enterMode:'2',
+								});
+							</script>
 					</c:if>
 			</tr>
+			<c:set var="file" value="${file}" />
+			<c:if test="${file != null}">
+				<c:forEach var="row" items="${file}">
+					<tr>
+						<td>첨부파일</td>
+						<td>
+							${row.file_name}&nbsp<font size="1em">(${row.file_size}KB)</font>
+							<button type="button" class="fileDelBtn" value="${row.bff_idx}">삭제</button>
+							<input type="hidden" id="bff_idx" name="bff_idx" value="${row.bff_idx}" />
+						</td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<tr>
+					<td>파일첨부</td>
+					<td><input type="file" id="file" name="file" multiple></td>
+				</tr>	
 		</tbody>
 	</table>
-	<input type="hidden" id="bf_idx" value="${read.bf_idx}" />
-	<input type="hidden" id="bf_cate_idx" value="${read.bf_cate_idx}" />	
+	<input type="hidden" id="bf_idx" name="bf_idx" value="${read.bf_idx}" />
+	<input type="hidden" id="bf_cate_idx" name="bf_cate_idx" value="${read.bf_cate_idx}" />
+	<input type="hidden" id="mem_idx" name="mem_idx" value="${read.mem_idx}" />	
 </form>
 	 <button type = "button" id="btn_list">목록</button>
 	 <c:set var="auth" value="${read.bf_contents}" />

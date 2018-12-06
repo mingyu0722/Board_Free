@@ -108,12 +108,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public boolean fileUpload(MultipartFile file, int mem_idx) throws Exception {
+	public boolean fileUpload(List<MultipartFile> file, int mem_idx) throws Exception {
 		FileVO fvo = new FileVO();
-		BoardFileHandler boardFileHandler = new BoardFileHandler(file, fvo, servletContext);
-		boardFileHandler.uploadFile();
 		fvo.setMem_idx(mem_idx);
-		if(fileMapper.fileUpload(fvo) > 0)
+		int count = 0;
+		for(int i=0; i<file.size(); i++) {
+			BoardFileHandler boardFileHandler = new BoardFileHandler(file.get(i), fvo, servletContext);
+			boardFileHandler.uploadFile();
+			if(fileMapper.fileUpload(fvo) > 0)
+				count++;
+		}		
+		if(count == file.size())
 			return true;
 		else
 			return false;
@@ -126,15 +131,43 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public FileVO fileDown(int bf_idx) throws Exception {
-		FileVO fvo = new FileVO();
-		fvo = fileMapper.fileDown(bf_idx);
-		if(fvo != null) {
-			fvo.setFile_size(fvo.getFile_size() / 1024);
+	public List<FileVO> fileDown(int bf_idx) throws Exception {
+		List<FileVO> fvo = fileMapper.fileDown(bf_idx);
+		if(fvo.size() > 0) {
+			for(int i=0; i<fvo.size(); i++) {
+				fvo.get(i).setFile_size(fvo.get(i).getFile_size() / 1024);
+			}
 			return fvo;
 		}
 		else
 			return null;
+	}
+	
+	@Override
+	public boolean fileDelete(FileVO fvo) throws Exception {
+		
+		if(fileMapper.fileDelete(fvo) > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean updateFileUpload(List<MultipartFile> file, int mem_idx, int bf_idx) throws Exception {
+		FileVO fvo = new FileVO();
+		fvo.setMem_idx(mem_idx);
+		fvo.setBf_idx(bf_idx);
+		int count = 0;
+		for(int i=0; i<file.size(); i++) {
+			BoardFileHandler boardFileHandler = new BoardFileHandler(file.get(i), fvo, servletContext);
+			boardFileHandler.uploadFile();
+			if(fileMapper.fileUpload(fvo) > 0)
+				count++;
+		}		
+		if(count == file.size())
+			return true;
+		else
+			return false;
 	}
 	
 	@Override

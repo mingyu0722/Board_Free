@@ -33,13 +33,19 @@ public interface BoardService {
 	public boolean write(BoardVO vo) throws Exception;
 	
 	//File Upload
-	public boolean fileUpload(MultipartFile file, int mem_idx) throws Exception;
+	public boolean fileUpload(List<MultipartFile> file, int mem_idx) throws Exception;
 	
 	//Read
 	public BoardVO read(BoardVO vo) throws Exception;
 	
 	//File Down
-	public FileVO fileDown(int bf_idx) throws Exception;
+	public List<FileVO> fileDown(int bf_idx) throws Exception;
+	
+	//File Delete
+	public boolean fileDelete(FileVO fvo) throws Exception;
+	
+	//Update File Upload
+	public boolean updateFileUpload(List<MultipartFile> file, int mem_idx, int bf_idx) throws Exception;
 	
 	//Recommend
 	public void recommend(BoardVO vo) throws Exception;

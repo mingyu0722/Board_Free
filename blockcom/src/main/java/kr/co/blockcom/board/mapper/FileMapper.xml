@@ -31,6 +31,8 @@
 	
 	<select id="fileDown" resultType="kr.co.blockcom.board.vo.FileVO">
 		SELECT
+			bff_idx,
+			bf_idx,
 			file_path,
 			file_name,
 			file_size
@@ -39,5 +41,36 @@
 		WHERE
 			bf_idx = #{bf_idx};
 	</select>
+	
+	<delete id="fileDelete">
+		DELETE
+			FROM
+				board_free_file
+			WHERE
+				bf_idx = #{bf_idx}
+			AND
+				bff_idx = #{bff_idx};	
+	</delete>
+	
+	<insert id="updatdFileUpload">
+		INSERT 
+			INTO 
+				board_free_file
+				(
+					bf_idx, 
+					mem_idx, 
+					file_path,
+					file_name, 
+					file_size
+				)
+			VALUES 
+				( 
+				 	#{bf_idx}, 
+				 	#{mem_idx},  
+				 	#{file_path}, 
+				 	#{file_name},
+				 	#{file_size}
+				);
+	</insert>
 </mapper>	
 	

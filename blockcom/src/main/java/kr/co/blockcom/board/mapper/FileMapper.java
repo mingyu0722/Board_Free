@@ -20,10 +20,26 @@ public interface FileMapper {
 	
 	/**
 	 * 파일 다운로드
-	 * @param FileVO
-	 * @return FileVO
+	 * @param int
+	 * @return List<FileVO>
 	 * @throws Exception
 	 */
-	public FileVO fileDown(int bf_idx) throws Exception;
+	public List<FileVO> fileDown(int bf_idx) throws Exception;
 	
+	/**
+	 * 파일 삭제(수정화면에서 가능)
+	 * @param bf_idx
+	 * @param bff_idx
+	 * @return int (삭제된 row 수)
+	 * @throws Exception
+	 */
+	public int fileDelete(FileVO fvo) throws Exception;
+	
+	/**
+	 * 파일 수정 시 파일 업로드
+	 * @param fvo
+	 * @return int
+	 * @throws Exception
+	 */
+	public int updatdFileUpload(FileVO fvo) throws Exception;
 }

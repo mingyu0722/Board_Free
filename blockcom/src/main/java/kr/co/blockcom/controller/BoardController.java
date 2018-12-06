@@ -115,15 +115,9 @@ public class BoardController {
 	
 	@PostMapping(value="/boardwrite")
 	//view에서 입력된 데이터를 vo객체에 담아 DB로 전달.
-	public @ResponseBody String insert(@ModelAttribute UploadVO uvo) throws Exception {
-		BoardVO vo = new BoardVO();
-		vo.setBf_cate_idx(uvo.getBf_cate_idx());
-		vo.setBf_title(uvo.getBf_title());
-		vo.setBf_contents(uvo.getBf_contents());
-		vo.setMem_idx(uvo.getMem_idx());
-		vo.setUse_sec(uvo.getUse_sec());
-		if(uvo.getFile().getSize() > 0) {
-			if(boardService.write(vo) == true  && boardService.fileUpload(uvo.getFile(), uvo.getMem_idx()) == true)
+	public @ResponseBody String insert(@ModelAttribute BoardVO vo, @RequestParam List<MultipartFile> file) throws Exception {
+		if(file.get(0).getSize() > 0) {
+			if(boardService.write(vo) == true  && boardService.fileUpload(file, vo.getMem_idx()) == true)
 				return "true";
 			else
 				return "false";
@@ -146,10 +140,8 @@ public class BoardController {
 		vo.setMem_idx(currentMemeberIdx);
 		BoardVO readVo = boardService.read(vo);
 		
-		FileVO fvo = new FileVO();
-		fvo.setBf_idx(bf_idx);
-		fvo = boardService.fileDown(bf_idx);
-				
+		List<FileVO> fvo = boardService.fileDown(bf_idx);
+		
 		ReplyVO rvo = new ReplyVO();
 		rvo.setBf_idx(bf_idx);
 		rvo.setPage(rpage);
@@ -223,11 +215,15 @@ public class BoardController {
 		vo.setBf_idx(bf_idx);
 		vo.setMem_idx(currentMemeberIdx);
 		vo = boardService.read(vo);
+		
+		List<FileVO> fvo = boardService.fileDown(bf_idx);
+		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("update");
 		int currentMemberIdx = (Integer)session.getAttribute("mem_idx");
 		if(currentMemberIdx == vo.getMem_idx() || currentMemberIdx == 1) {
 			mav.addObject("read", vo);
+			mav.addObject("file", fvo);
 			return mav;
 		}
 		else {
@@ -243,8 +239,27 @@ public class BoardController {
 	
 	@PostMapping(value="/boardupdate")
 	//bf_idx를 전달받은 update page이동 후 수정된 내용을 vo 객체에 담아 DB로 전달. update 성공 시 true 반환 및 bf_idx해당 read page로 이동.
-	public @ResponseBody String update(@ModelAttribute BoardVO vo, HttpSession session) throws Exception {
-		if(boardService.update(vo) == true)
+	public @ResponseBody String update(@ModelAttribute BoardVO vo, @RequestParam List<MultipartFile> file, HttpSession session) throws Exception {
+		int mem_idx = vo.getMem_idx();
+		int bf_idx = vo.getBf_idx();
+		int size = file.size();
+		if(file.get(0).getSize() > 0) {
+			if(boardService.update(vo) == true  && boardService.updateFileUpload(file, mem_idx, bf_idx) == true)
+				return "true";
+			else
+				return "false";
+		}
+		else {
+			if(boardService.update(vo) == true)
+				return "true";
+			else 
+				return "false"; 
+		}
+	}
+	
+	@PostMapping(value="/fileDelete")
+	public @ResponseBody String fileDelete(@ModelAttribute FileVO fvo) throws Exception {
+		if(boardService.fileDelete(fvo) == true)
 			return "true";
 		else
 			return "false";

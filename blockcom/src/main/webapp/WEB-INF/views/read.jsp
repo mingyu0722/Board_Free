@@ -59,16 +59,18 @@
 			<tr>
 				<td colspan="2" style="word-break:break-all; word-wrap:break-word;">${read.bf_contents}</td>
 			</tr>
-			<tr>
-				<td>첨부파일</td>
-				<c:set var="file" value="${file}" />
-				<c:if test="${file == null}"><td >첨부파일 없음</td></c:if>
-				<c:if test="${file != null}">
-					<td>
-						<a href="${file.file_path}" download>${file.file_name}</a>&nbsp<font size="1em">(${file.file_size}KB)</font>
-					</td>
-				</c:if>
-			</tr>
+			<c:set var="file" value="${file}" />
+			<c:if test="${file != null}">
+				<c:forEach var="row" items="${file}">
+					<tr>
+						<td>첨부파일</td>
+						<td>
+							<a href="${row.file_path}" download>${row.file_name}</a>&nbsp<font size="1em">(${row.file_size}KB)</font>
+							<input type="hidden" id="bff_idx" name="bff_idx" value="${row.bff_idx}" />
+						</td>
+					</tr>
+				</c:forEach>	
+			</c:if>
 		</tbody>
 	</table>
 	

@@ -14,20 +14,22 @@ $(function(){
 			$("#bf_contents").focus();
 			return;
 		}
-			
-		var data = {};
-		data["bf_idx"] = $("#bf_idx").val();
-		data["bf_title"] = $("#bf_title").val();
-		data["bf_contents"] = CKEDITOR.instances.bf_contents.getData();
-		data["use_sec"] = 'N';
+		
+		var formData = new FormData($("#form")[0]);
+		formData.append("bf_contents", CKEDITOR.instances.bf_contents.getData());
+		
 		if($("#selectSecure").is(":checked")) {
-			data["use_sec"] = 'Y';
+			formData.append("use_sec", 'Y');
+		} else {
+			formData.append("use_sec", 'N');
 		}
 		
 		$.ajax({
 			type : "POST",
 			url  : "/blockcom/boardupdate",
-			data : data,
+			data : formData,
+			processData : false,
+            contentType : false,
 			success : function(response){
 				if(response == "true") {
 					alert("게시물이 수정되었습니다.");
@@ -47,4 +49,30 @@ $(function(){
 			location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
 		}
 	})
+	
+	$(".fileDelBtn").click(function(){
+		var bff_idx = $(this).val();
+		var bf_idx = $("#bf_idx").val();
+		var data = {};
+		data["bff_idx"] = bff_idx;
+		data["bf_idx"] = bf_idx;
+		if(confirm("파일을 삭제하시겠습니까?")) {
+			$.ajax({
+				type : "POST",
+				url  : "/blockcom/fileDelete",
+				data : data,
+				success : function(response){
+					if(response == "true") {
+						alert("파일이 삭제되었습니다.");
+						location.href="/blockcom/boardupdate?bf_idx="+bf_idx;
+					}
+					else if(response == "false")
+						alert("DB Delete Error!");
+				},
+				error : function(){
+					console.log('error');
+				}
+			});
+		}
+	});
 });

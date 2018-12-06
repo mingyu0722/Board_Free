@@ -36,6 +36,8 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 	
+	config.extraPlugins = 'confighelper';
+	
 	// Remove tag
 	/*config.enterMode = CKEDITOR.ENTER_BR;
 	CKEDITOR.dtd.$removeEmpty['i']=false;

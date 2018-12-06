@@ -35,7 +35,9 @@
 				</tr>
 				<tr>
 					<td>파일첨부</td>
-					<td><input type="file" id="file" name="file"></td>
+					<td>
+						<input type="file" name="file" multiple>
+					</td>
 				</tr>
 			</tbody>
 		</table>
