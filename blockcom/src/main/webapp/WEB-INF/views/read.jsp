@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Read</title>
 <script src="/blockcom/resources/js/jquery/jquery-1.12.4.min.js"></script>
+<script src="/blockcom/resources/js/jquery/autolink.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="/blockcom/resources/js/read.js"></script>
 <style>
@@ -35,7 +36,7 @@
 </head>
 <body>
 <h2>게시글 보기</h2>
-	<table border="1" id="detail" style="width:600px">
+	<table border="1" id="detail" name="detail" style="width:600px">
 		<colgroup>
 			<col width='15%' />
 			<col width='*%' />
@@ -57,7 +58,9 @@
 				<td>${read.bf_title}</td> 
 			</tr>
 			<tr>
-				<td colspan="2" style="word-break:break-all; word-wrap:break-word;">${read.bf_contents}</td>
+				<td colspan="2" style="word-break:break-all; word-wrap:break-word;">
+					<p id="bf_contents">${read.bf_contents}</p>
+				</td>
 			</tr>
 			<c:set var="file" value="${file}" />
 			<c:if test="${file != null}">
@@ -73,7 +76,7 @@
 			</c:if>
 		</tbody>
 	</table>
-	
+
 	<input type="hidden" id="bf_idx" value="${read.bf_idx}" />
 	<input type="hidden" id="mem_idx" value="${read.mem_idx}" />
 	<input type="hidden" id="bf_cate_idx" value="${read.bf_cate_idx}" />

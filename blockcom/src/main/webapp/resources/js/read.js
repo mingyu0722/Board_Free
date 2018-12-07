@@ -2,7 +2,7 @@ $(function(){
 	
 	
 	$("#btn_list").click(function(){
-		location.href="/blockcom/boardlist?bf_cate_idx=1&page=1&perPageNumber=10&pageNumber=5";
+		location.href="/blockcom/boardlist?bf_cate_idx="+$("#bf_cate_idx").val()+"&page=1&perPageNumber=10&pageNumber=5";
 	})
 	$("#btn_update").click(function(){
 		location.href="/blockcom/boardupdate?bf_idx="+$("#bf_idx").val();
@@ -37,8 +37,7 @@ function recommend() {
 	if($("#recommend").prop("checked", true)) {
 		var data = {};
 		data["bf_idx"] = $("#bf_idx").val();
-		data["mem_idx"] = $("#memIdx").val();
-		
+		data["bf_cate_idx"] = $("#bf_cate_idx").val();
 		$.ajax({
 			type : "POST",
 			url : "/blockcom/recommend",

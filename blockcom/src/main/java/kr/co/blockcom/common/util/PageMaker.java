@@ -10,7 +10,7 @@ public class PageMaker<T extends PagingVO> {
 	
 	public PagingVO setPaging(PagingVO pvo) {
 		
-		pvo.setTotalPage((int)(Math.ceil(pvo.getTotalCount() / (double)pvo.getPerPageNumber())));
+		pvo.setTotalPage((int)(Math.ceil(pvo.getRealTotalCount() / (double)pvo.getPerPageNumber())));
 		
 		pvo.setTempEndPage((int)(Math.ceil(pvo.getPage() / (double)pvo.getBlockSize()) * pvo.getBlockSize()));
 		pvo.setStartPage((pvo.getTempEndPage() - pvo.getBlockSize()) + 1);

@@ -36,6 +36,16 @@
         	</if>
 	</select>
 	
+	<!-- Recommend Count -->
+	<select id="recommendCount" resultType="int">
+		SELECT
+			count(*)
+			FROM
+				recommend
+			WHERE 
+				bf_cate_idx = #{bf_cate_idx}	;
+	</select>
+	
 	<!-- Search Recommended Board List -->
 	<select id="recommendedList" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT 
@@ -76,7 +86,9 @@
 	   				COUNT(*) 
 	   				FROM recommend
        				WHERE recommend.bf_idx = bf.bf_idx
-				) != 0;
+				) != 0
+			ORDER 
+				BY bf.bf_idx desc;
 	</select>
 	
 	<!-- Search Board List -->
@@ -219,10 +231,13 @@
 				recommend
 				(
 					bf_idx, 
-					mem_idx
+					mem_idx,
+					bf_cate_idx
 				) 
 				SELECT 
-					#{bf_idx}, #{mem_idx}
+					#{bf_idx}, 
+					#{mem_idx},
+					#{bf_cate_idx}
 				FROM 
 					DUAL
 				WHERE 

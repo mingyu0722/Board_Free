@@ -81,7 +81,10 @@ public class BoardServiceImpl implements BoardService {
 		}
 		
 		int totalCount = totalCount(pvo);
+		int recTotalCount = boardMapper.recommendCount(pvo.getBf_cate_idx());
+		int realTotalCount = totalCount - recTotalCount;
 		pvo.setTotalCount(totalCount);
+		pvo.setRealTotalCount(realTotalCount);
 		
 		PageMaker pageMaker = new PageMaker(pvo);
 		pvo = pageMaker.setPaging(pvo);
@@ -163,10 +166,10 @@ public class BoardServiceImpl implements BoardService {
 		fvo.setBf_idx(bf_idx);
 		int count = 0;
 		BoardFileHandler boardFileHandler = new BoardFileHandler(servletContext);
-		for(int i=0; i<file.size(); i++) {
+  		for(int i=0; i<file.size(); i++) {
 			if(file.get(i).getSize() > 0) {
 				boardFileHandler.uploadFile(fvo, file.get(i));
-				if(fileMapper.fileUpload(fvo) > 0)
+				if(fileMapper.updateFileUpload(fvo) > 0)
 					count++;
 			}
 			else

@@ -53,6 +53,7 @@ public class BoardController {
 	public @ResponseBody String memSession(@RequestBody String mem_idx, HttpSession session) {
 		mem_idx = mem_idx.substring(8);		//간략하게 처리할 방법 찾아내기
 		session.setAttribute("mem_idx", Integer.parseInt(mem_idx));
+
 		return "Success";
 	}
 	
@@ -195,7 +196,7 @@ public class BoardController {
 	public @ResponseBody void recommend(@ModelAttribute BoardVO vo, HttpSession session) throws Exception {
 		int currentMemeberIdx = (Integer)session.getAttribute("mem_idx");
 		vo.setMem_idx(currentMemeberIdx);
-		boardService.recommend(vo);
+ 		boardService.recommend(vo);
 	}
 	
 	@PostMapping(value="/delRecommend")

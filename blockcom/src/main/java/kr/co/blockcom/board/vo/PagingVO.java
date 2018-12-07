@@ -9,6 +9,7 @@ public class PagingVO extends BoardVO{
 	private int perPageNumber;	//페이지 당 보일 게시글 개수
 	private int blockSize;		//한 화면에 보여질 페이지 수
 	private int totalCount;		//전체 게시글 개수
+	private int realTotalCount; //추천글 제외 게시글 개수
 	private int totalPage;		//전체 페이지 수
 	private int tempEndPage;	//화면에 보여질 끝페이지
 	private int startPage;		//화면에 보이는 시작 페이지

@@ -20,6 +20,8 @@ public interface BoardMapper {
 		 */ 
 		public int totalCount(PagingVO vo) throws Exception;
 		
+		public int recommendCount(int bf_cate_idx) throws Exception;
+		
 		/**
 		 * 추천글
 		 * @param bf_cate_idx
