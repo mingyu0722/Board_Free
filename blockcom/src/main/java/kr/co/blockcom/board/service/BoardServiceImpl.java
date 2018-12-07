@@ -112,10 +112,14 @@ public class BoardServiceImpl implements BoardService {
 		FileVO fvo = new FileVO();
 		fvo.setMem_idx(mem_idx);
 		int count = 0;
+		BoardFileHandler boardFileHandler = new BoardFileHandler(servletContext);
 		for(int i=0; i<file.size(); i++) {
-			BoardFileHandler boardFileHandler = new BoardFileHandler(file.get(i), fvo, servletContext);
-			boardFileHandler.uploadFile();
-			if(fileMapper.fileUpload(fvo) > 0)
+			if(file.get(i).getSize() > 0) {
+				boardFileHandler.uploadFile(fvo, file.get(i));
+				if(fileMapper.fileUpload(fvo) > 0)
+					count++;
+			}
+			else
 				count++;
 		}		
 		if(count == file.size())
@@ -158,10 +162,14 @@ public class BoardServiceImpl implements BoardService {
 		fvo.setMem_idx(mem_idx);
 		fvo.setBf_idx(bf_idx);
 		int count = 0;
+		BoardFileHandler boardFileHandler = new BoardFileHandler(servletContext);
 		for(int i=0; i<file.size(); i++) {
-			BoardFileHandler boardFileHandler = new BoardFileHandler(file.get(i), fvo, servletContext);
-			boardFileHandler.uploadFile();
-			if(fileMapper.fileUpload(fvo) > 0)
+			if(file.get(i).getSize() > 0) {
+				boardFileHandler.uploadFile(fvo, file.get(i));
+				if(fileMapper.fileUpload(fvo) > 0)
+					count++;
+			}
+			else
 				count++;
 		}		
 		if(count == file.size())

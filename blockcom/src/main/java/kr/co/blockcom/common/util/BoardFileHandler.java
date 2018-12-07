@@ -19,13 +19,11 @@ public class BoardFileHandler {
 	private FileVO fvo;
 	ServletContext servletContext;
 	
-	public BoardFileHandler(MultipartFile file, FileVO fvo, ServletContext servletContext) {
+	public BoardFileHandler(ServletContext servletContext) {
 		this.servletContext = servletContext;
-		this.file = file;
-		this.fvo = fvo;
 	}
 	
-	public void uploadFile() {
+	public void uploadFile(FileVO fvo, MultipartFile file) {
 		String REAL_PATH = servletContext.getRealPath("/files");
 		String SAVE_PATH = servletContext.getContextPath();
 		try {

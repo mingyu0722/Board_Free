@@ -45,4 +45,13 @@ $(function(){
 			location.href="/blockcom/boardlist?bf_cate_idx="+$("#bf_cate_idx").val()+"&page=1&perPageNumber=10&pageNumber=5";
 		};
 	});
+	
+	$("#addRow").click(function(){
+		var table = document.getElementById("writeTable");
+		var row = table.insertRow(3);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		cell1.innerHTML = "파일첨부";
+		cell2.innerHTML = "<input type='file' name='file' multiple>";
+	});
 });

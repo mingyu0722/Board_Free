@@ -14,7 +14,7 @@
 	<h2>게시글 작성</h2>
 	<form id="form" name="form" method="post" action="boardwrite" accept-charset="UTF-8" enctype="multipart/form-data">
 		<p>비밀글<input type="checkbox" id="selectSecure" name="selectSecure" /></p>		
-		<table border="1" style="width: 650px;">
+		<table border="1" id="writeTable" style="width: 650px;">
 			<colgroup>
 				<col width='15%' />
 				<col width='*%' />
@@ -37,6 +37,7 @@
 					<td>파일첨부</td>
 					<td>
 						<input type="file" name="file" multiple>
+						<input type="button" id="addRow" name="addRow" style="float:right;" value="추가" >
 					</td>
 				</tr>
 			</tbody>

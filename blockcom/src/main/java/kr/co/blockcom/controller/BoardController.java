@@ -245,7 +245,7 @@ public class BoardController {
 		int size = file.size();
 		if(file.get(0).getSize() > 0) {
 			if(boardService.update(vo) == true  && boardService.updateFileUpload(file, mem_idx, bf_idx) == true)
-				return "true";
+				return "true"; 
 			else
 				return "false";
 		}

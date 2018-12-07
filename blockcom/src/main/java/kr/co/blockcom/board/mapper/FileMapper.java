@@ -41,5 +41,5 @@ public interface FileMapper {
 	 * @return int
 	 * @throws Exception
 	 */
-	public int updatdFileUpload(FileVO fvo) throws Exception;
+	public int updateFileUpload(FileVO fvo) throws Exception;
 }

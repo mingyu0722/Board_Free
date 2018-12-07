@@ -52,7 +52,7 @@
 				bff_idx = #{bff_idx};	
 	</delete>
 	
-	<insert id="updatdFileUpload">
+	<insert id="updateFileUpload">
 		INSERT 
 			INTO 
 				board_free_file

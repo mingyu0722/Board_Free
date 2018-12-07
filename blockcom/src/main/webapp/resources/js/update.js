@@ -51,6 +51,7 @@ $(function(){
 	})
 	
 	$(".fileDelBtn").click(function(){
+		$(this).hide();
 		var bff_idx = $(this).val();
 		var bf_idx = $("#bf_idx").val();
 		var data = {};
@@ -64,7 +65,6 @@ $(function(){
 				success : function(response){
 					if(response == "true") {
 						alert("파일이 삭제되었습니다.");
-						location.href="/blockcom/boardupdate?bf_idx="+bf_idx;
 					}
 					else if(response == "false")
 						alert("DB Delete Error!");
@@ -73,6 +73,20 @@ $(function(){
 					console.log('error');
 				}
 			});
+		}
+	});
+	
+	$("#addRow").click(function(){
+		
+		if($("#file").val() != "") {
+			var table = document.getElementById("update");
+			var trIdx = $('#update tr:last').attr('id');
+			var row = table.insertRow(trIdx);
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			cell1.innerHTML = "파일첨부";
+			cell2.innerHTML = "<input type='file' id='file' name='file' multiple><input type='button' id='addRow' name='addRow' style='float:right;' value='추가' >";
+			$(this).hide();
 		}
 	});
 });

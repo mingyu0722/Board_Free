@@ -39,7 +39,7 @@
 				<c:set var="auth" value="${read.bf_contents}" />
 					<tr><c:if test="${auth == '수정할 수 없습니다.'}"><td colspan="2">${read.bf_contents}</td></c:if>
 					<c:if test="${auth != '수정할 수 없습니다.'}">
-						<td colspan="2"><textarea id="bf_contents" rows="6" cols="70"></textarea></td> 
+						<td colspan="2"><textarea id="bf_contents" rows="6" cols="70">${read.bf_contents}</textarea></td> 
 							<script>
 								CKEDITOR.replace('bf_contents', {
 									enterMode:'2',
@@ -61,9 +61,12 @@
 				</c:forEach>
 			</c:if>
 			<tr>
-					<td>파일첨부</td>
-					<td><input type="file" id="file" name="file" multiple></td>
-				</tr>	
+				<td>파일첨부</td>
+				<td>
+					<input type="file" id="file" name="file" multiple>
+					<input type="button" id="addRow" name="addRow" style="float:right;" value="추가" >
+				</td>
+			</tr>	
 		</tbody>
 	</table>
 	<input type="hidden" id="bf_idx" name="bf_idx" value="${read.bf_idx}" />
