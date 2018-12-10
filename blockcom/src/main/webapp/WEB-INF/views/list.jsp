@@ -13,7 +13,7 @@
 <style>
 	#list tr, td {
 		border: 1px solid #ddd;
-		text-align: left;
+		text-align: center;
 		padding: 15px;
 	}
 	#list {
