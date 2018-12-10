@@ -168,7 +168,7 @@
 	 	<ul class="pagingUl">
 		<c:if test="${prev}">
 			<li><a 
-				href='boardread?bf_idx=${read.bf_idx}&rpage=${rpage - 1}'>
+				href='boardread?bf_idx=${read.bf_idx}&bf_cate_idx=${read.bf_cate_idx}&rpage=${rpage - 1}'>
 				&laquo;
 				</a>
 			</li>
@@ -176,7 +176,7 @@
 		<c:forEach begin="${startPage}" end="${endPage}" var="idx">
 			<li
 				class='<c:out value="${idx == rpage? 'current':''}" />'>
-				<a href='boardread?bf_idx=${read.bf_idx}&rpage=${idx}'>${idx}</a>
+				<a href='boardread?bf_idx=${read.bf_idx}&bf_cate_idx=${read.bf_cate_idx}&rpage=${idx}'>${idx}</a>
 			</li>
 		</c:forEach>
 		<c:if test="${next}">

@@ -77,12 +77,19 @@ public interface BoardMapper {
 		public int del_recommend(BoardVO vo) throws Exception;
 		
 		/**
+		 * 글 삭제 시 해당 추천 해제
+		 * @param bf_idx
+		 * @throws Exception
+		 */
+		public void del_recommend_all(int bf_idx) throws Exception;
+		
+		/**
 		 * 이전글
 		 * @param bf_idx
 		 * @return BoardVO
 		 * @throws Exception
 		 */
-		public BoardVO preArticle(int bf_idx) throws Exception;
+		public BoardVO preArticle(BoardVO vo) throws Exception;
 		
 		/**
 		 * 다음글
@@ -90,7 +97,7 @@ public interface BoardMapper {
 		 * @return BoardVO
 		 * @throws Exception
 		 */
-		public BoardVO nextArticle(int bf_idx) throws Exception;
+		public BoardVO nextArticle(BoardVO vo) throws Exception;
 		
 		/**
 		 * 글 삭제

@@ -17,6 +17,7 @@ $(function(){
 		var use_sec = td.eq(7).text();
 		var mem_idx = td.eq(3).text();
 		var bf_idx = td.eq(1).text();
+		var bf_cate_idx = $("#bf_cate_idx").val();
 		var data = {};
 		data["mem_idx"] = mem_idx;
 		if(use_sec == 'Y'){
@@ -26,7 +27,7 @@ $(function(){
 				data : data,
 				success : function(response) {
 					if(response == "true")
-						location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";
+						location.href="/blockcom/boardread?bf_idx="+bf_idx+"&bf_cate_idx="+bf_cate_idx+"&rpage=1";
 					else if(response == "false")
 						alert("읽을 권한이 없습니다.");
 				},
@@ -35,7 +36,7 @@ $(function(){
 				}	
 			});
 		} else if(use_sec == 'N') {
-			location.href="/blockcom/boardread?bf_idx="+bf_idx+"&rpage=1";
+			location.href="/blockcom/boardread?bf_idx="+bf_idx+"&bf_cate_idx="+bf_cate_idx+"&rpage=1";
 		}
 		
 		return false;    //이벤트 버블링 방지 : 주소창에 # 제거

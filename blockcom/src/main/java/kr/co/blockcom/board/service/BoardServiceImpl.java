@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.eclipse.jdt.internal.compiler.parser.ParserBasicInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +42,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class BoardServiceImpl implements BoardService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 	
 	private final BoardMapper boardMapper;
 	private final MemberMapper memberMapper;
@@ -203,19 +207,28 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public BoardVO preArticle(int bf_idx) throws Exception {
-		return boardMapper.preArticle(bf_idx);
+	public BoardVO preArticle(int bf_idx, int bf_cate_idx) throws Exception {
+		BoardVO vo = new BoardVO();
+		vo.setBf_idx(bf_idx);
+		vo.setBf_cate_idx(bf_cate_idx);
+		return boardMapper.preArticle(vo);
 	}
 	
 	@Override
-	public BoardVO nextArticle(int bf_idx) throws Exception {
-		return boardMapper.nextArticle(bf_idx);
+	public BoardVO nextArticle(int bf_idx, int bf_cate_idx) throws Exception {
+		BoardVO vo = new BoardVO();
+		vo.setBf_idx(bf_idx);
+		vo.setBf_cate_idx(bf_cate_idx);
+		return boardMapper.nextArticle(vo);
 	}
 	
 	@Override
 	public boolean delete(int bf_idx) throws Exception {
-		if(boardMapper.delete(bf_idx) == true)
+		if(boardMapper.delete(bf_idx) == true) {
+			boardMapper.del_recommend_all(bf_idx);
 			return true;
+		}
+			
 		else
 			return false;
 	}
@@ -232,6 +245,7 @@ public class BoardServiceImpl implements BoardService {
 	public List<ReplyVO> replyList(ReplyVO rvo) throws Exception {
 		int totalCount = replyMapper.totalCount(rvo.getBf_idx());
 		rvo.setTotalCount(totalCount);
+		rvo.setRealTotalCount(totalCount);
 		PageMaker pageMaker = new PageMaker(rvo);
 		rvo = (ReplyVO)pageMaker.setPaging(rvo);
 		return replyMapper.replyList(rvo);

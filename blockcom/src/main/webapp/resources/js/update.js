@@ -33,7 +33,7 @@ $(function(){
 			success : function(response){
 				if(response == "true") {
 					alert("게시물이 수정되었습니다.");
-					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
+					location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&bf_cate_idx="+$("#bf_cate_idx").val()+"&rpage=1";
 				}
 				else if(response == "false")
 					alert("DB Update Error!");
@@ -46,7 +46,7 @@ $(function(){
 	
 	$("#btn_cancel").click(function(){
 		if(confirm("취소하시겠습니까?")) {
-			location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&rpage=1";
+			location.href="/blockcom/boardread?bf_idx="+$("#bf_idx").val()+"&bf_cate_idx="+$("#bf_cate_idx").val()+"&rpage=1";
 		}
 	})
 	

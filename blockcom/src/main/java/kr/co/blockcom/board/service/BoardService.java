@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.blockcom.board.vo.BoardVO;
@@ -14,6 +16,7 @@ import kr.co.blockcom.board.vo.MemberVO;
 import kr.co.blockcom.board.vo.PagingVO;
 import kr.co.blockcom.board.vo.ReplyVO;
 import kr.co.blockcom.board.vo.UploadVO;
+import kr.co.blockcom.controller.BoardController;
 
 public interface BoardService {
 	
@@ -57,10 +60,10 @@ public interface BoardService {
 	public boolean delRecommend(BoardVO vo) throws Exception;
 	
 	//Previous Article
-	public BoardVO preArticle(int bf_idx) throws Exception;
+	public BoardVO preArticle(int bf_idx, int bf_cate_idx) throws Exception;
 	
 	//Next Article
-	public BoardVO nextArticle(int bf_idx) throws Exception;
+	public BoardVO nextArticle(int bf_idx, int bf_cate_idx) throws Exception;
 	
 	//Delete
 	public boolean delete(int bf_idx) throws Exception;

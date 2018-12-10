@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ResultSetSupportingSqlParameter;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,8 @@ import kr.co.blockcom.board.vo.UploadVO;
 @Controller
 @RequestMapping("/")
 public class BoardController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
 	@Autowired		//특정기능을 수행하기 위한 해당 빈을 사용하기 위해 특정 프로퍼티를 자동으로 연결해준다.
 	private BoardService boardService;
@@ -133,14 +137,15 @@ public class BoardController {
 
 	@GetMapping(value="/boardread")
 	//bf_idx에 해당하는 글과 댓글을 DB 요청 후 view로 전달. replyList는 해당 idx에 있는 모든 것을 출력하므로 List로 받은 후 List객체를 전달.
-	public ModelAndView view(@RequestParam int bf_idx, @RequestParam int rpage, HttpSession session) throws Exception {
+	public ModelAndView view(@RequestParam int bf_idx, @RequestParam int bf_cate_idx, @RequestParam int rpage, HttpSession session) throws Exception {
 		
 		int currentMemeberIdx = (Integer) session.getAttribute("mem_idx");
 		BoardVO vo = new BoardVO();
 		vo.setBf_idx(bf_idx);
+		vo.setBf_cate_idx(bf_cate_idx);
 		vo.setMem_idx(currentMemeberIdx);
 		BoardVO readVo = boardService.read(vo);
-		
+
 		List<FileVO> fvo = boardService.fileDown(bf_idx);
 		
 		ReplyVO rvo = new ReplyVO();
@@ -165,8 +170,8 @@ public class BoardController {
 		
 		mav.addObject("read", readVo);
 		mav.addObject("file", fvo);
-		mav.addObject("preArticle", boardService.preArticle(bf_idx));
-		mav.addObject("nextArticle", boardService.nextArticle(bf_idx));
+		mav.addObject("preArticle", boardService.preArticle(bf_idx, bf_cate_idx));
+		mav.addObject("nextArticle", boardService.nextArticle(bf_idx, bf_cate_idx));
 		mav.addObject("replyList", replyList);
 		mav.addObject("memIdx", currentMemeberIdx);
 		mav.addObject("rec_flag", boardService.recommend_flag(vo));

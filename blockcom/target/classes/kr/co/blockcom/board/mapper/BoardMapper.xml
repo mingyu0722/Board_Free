@@ -43,7 +43,7 @@
 			FROM
 				recommend
 			WHERE 
-				bf_cate_idx = #{bf_cate_idx}	;
+				bf_cate_idx = #{bf_cate_idx};
 	</select>
 	
 	<!-- Search Recommended Board List -->
@@ -275,6 +275,15 @@
 				mem_idx = #{mem_idx};
 	</delete>
 	
+	<!-- 해당 글 삭제 시 모든 추천 해제 -->
+	<delete id="del_recommend_all">		
+		DELETE
+			FROM
+				recommend
+			WHERE
+				bf_idx = #{bf_idx};
+	</delete>
+	
 	<!-- PreArticle & NextArticle -->
 	<select id="preArticle" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT 
@@ -299,11 +308,13 @@
 							bf_idx <![CDATA[<]]> #{bf_idx}
 						AND
 							use_flag = 'Y'
+						AND
+							bf_cate_idx = #{bf_cate_idx}	
 					)
 			AND
-				bf.mem_idx = mb.mem_idx
-			AND
-				bf_cate_idx = 1;
+				bf.mem_idx = mb.mem_idx;
+<!-- 			AND
+				bf_cate_idx = #{bf_cate_idx}; -->
 	</select>
 	
 	<select id="nextArticle" resultType="kr.co.blockcom.board.vo.BoardVO">
@@ -329,11 +340,13 @@
 							bf_idx <![CDATA[>]]> #{bf_idx}
 						AND
 							use_flag = 'Y'
+						AND
+							bf_cate_idx = #{bf_cate_idx}
 					)
 			AND
-				bf.mem_idx = mb.mem_idx
-			AND
-				bf_cate_idx = 1;
+				bf.mem_idx = mb.mem_idx;
+<!-- 			AND
+				bf_cate_idx = #{bf_cate_idx}; -->
 	</select>
 	
 	<!-- Delete -->
