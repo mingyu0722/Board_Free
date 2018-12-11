@@ -1,5 +1,6 @@
 package kr.co.blockcom.common.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +27,13 @@ public class BoardFileHandler {
 	public void uploadFile(FileVO fvo, MultipartFile file) {
 		String REAL_PATH = servletContext.getRealPath("/files");
 		String SAVE_PATH = servletContext.getContextPath();
+		
+		File destdir = new File(REAL_PATH); //디렉토리 가져오기
+        
+        if(!destdir.exists()){
+            destdir.mkdirs(); //디렉토리가 존재하지 않는다면 생성
+        }
+
 		try {
 			String originalFileName = file.getOriginalFilename();
 			String extractName = originalFileName.substring(originalFileName.lastIndexOf("."), originalFileName.length());

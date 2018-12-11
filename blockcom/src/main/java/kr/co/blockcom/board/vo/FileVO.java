@@ -13,5 +13,6 @@ public class FileVO {
 	private String file_path;
 	private String file_name;
 	private int file_size;
+	private String file_ext;
 	
 }

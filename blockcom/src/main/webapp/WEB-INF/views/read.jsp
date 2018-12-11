@@ -61,6 +61,14 @@
 				<c:set var="bf_contents" value="${read.bf_contents}"></c:set>
 				<c:if test="${bf_contents != '등록되지 않은 글입니다.'}">
 					<td colspan="2" style="word-break:break-all; word-wrap:break-word;">
+						<c:set var="file" value="${file}" />
+						<c:if test="${file != null}">
+							<c:forEach var="row" items="${file}">
+								<c:if test="${row.file_ext == 'jpg' || row.file_ext == 'png' || row.file_ext == 'gif'}">
+									<img src="${row.file_path}" style="width:200px;height:200px;" value="${row.file_name}"/>
+								</c:if>
+							</c:forEach>	
+						</c:if>
 						<p id="bf_contents">${read.bf_contents}</p>
 					</td>
 				</c:if>
@@ -78,7 +86,6 @@
 						<td>첨부파일</td>
 						<td>
 							<a href="${row.file_path}" download>${row.file_name}</a>&nbsp<font size="1em">(${row.file_size}KB)</font>
-							<input type="hidden" id="bff_idx" name="bff_idx" value="${row.bff_idx}" />
 						</td>
 					</tr>
 				</c:forEach>	
