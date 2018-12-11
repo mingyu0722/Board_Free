@@ -58,9 +58,18 @@
 				<td>${read.bf_title}</td> 
 			</tr>
 			<tr>
-				<td colspan="2" style="word-break:break-all; word-wrap:break-word;">
-					<p id="bf_contents">${read.bf_contents}</p>
-				</td>
+				<c:set var="bf_contents" value="${read.bf_contents}"></c:set>
+				<c:if test="${bf_contents != '등록되지 않은 글입니다.'}">
+					<td colspan="2" style="word-break:break-all; word-wrap:break-word;">
+						<p id="bf_contents">${read.bf_contents}</p>
+					</td>
+				</c:if>
+				<c:if test="${bf_contents == '등록되지 않은 글입니다.'}">
+					<script>
+						alert("등록되지 않은 글입니다.");
+						history.back();
+					</script>
+				</c:if>
 			</tr>
 			<c:set var="file" value="${file}" />
 			<c:if test="${file != null}">

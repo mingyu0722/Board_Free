@@ -137,8 +137,15 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public BoardVO read(BoardVO vo) throws Exception {
-		boardMapper.viewCnt(vo);
-		return boardMapper.read(vo);
+		try {
+			boardMapper.viewCnt(vo);
+			return boardMapper.read(vo);
+		}
+		catch(Exception e) {
+			vo.setUse_sec("N");
+			vo.setBf_contents("등록되지 않은 글입니다.");
+			return vo;
+		}
 	}
 	
 	@Override
