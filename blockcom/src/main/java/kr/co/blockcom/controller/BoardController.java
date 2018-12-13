@@ -148,6 +148,7 @@ public class BoardController {
 		vo.setBf_cate_idx(bf_cate_idx);
 		vo.setMem_idx(currentMemeberIdx);
 		BoardVO readVo = boardService.read(vo);
+		readVo.setRecommendCnt(vo.getRecommendCnt());
 
 		List<FileVO> fvo = boardService.fileDown(bf_idx);
 

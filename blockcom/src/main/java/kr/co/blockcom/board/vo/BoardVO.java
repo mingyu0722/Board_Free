@@ -23,6 +23,7 @@ public class BoardVO {
 	private int bfr_idx;
 	private String bfr_contents;
 	private int replyCnt;
+	private int recommendCnt;
 	private String searchCondition;
 	private String searchValue;
 	

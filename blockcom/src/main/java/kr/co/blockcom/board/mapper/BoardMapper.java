@@ -29,6 +29,14 @@ public interface BoardMapper {
 	 * @throws Exception
 	 */
 	public int recommendCount(int bf_cate_idx) throws Exception;
+	
+	/**
+	 * 게시글 당 추천 수
+	 * @param bf_idx
+	 * @return int
+	 * @throws Exception
+	 */
+	public int recCntPerList(int bf_idx) throws Exception;
 
 	/**
 	 * 추천글

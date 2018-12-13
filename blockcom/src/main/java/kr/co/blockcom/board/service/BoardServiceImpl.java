@@ -136,6 +136,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO read(BoardVO vo) throws Exception {
 		try {
+			vo.setRecommendCnt(boardMapper.recCntPerList(vo.getBf_idx()));
 			boardMapper.viewCnt(vo);
 			return boardMapper.read(vo);
 		} catch (Exception e) {

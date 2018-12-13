@@ -46,6 +46,15 @@
 				bf_cate_idx = #{bf_cate_idx};
 	</select>
 	
+	<select id="recCntPerList" resultType="int">
+		SELECT 
+	   		COUNT(*) 
+	   		FROM 
+	   			recommend
+            WHERE
+				bf_idx = #{bf_idx};	
+	</select>
+	
 	<!-- Search Recommended Board List -->
 	<select id="recommendedList" resultType="kr.co.blockcom.board.vo.BoardVO">
 		SELECT 

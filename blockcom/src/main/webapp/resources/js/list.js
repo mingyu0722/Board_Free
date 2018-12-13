@@ -50,6 +50,11 @@ $(function(){
  		var searchCondition = $("#searchCondition").val();
  		var searchValue = $("#searchValue").val();
  		var bf_cate_idx = $("#bf_cate_idx").val();
+ 		if(searchValue == "") {
+ 			alert("검색어를 입력하세요.");
+ 			$("#searchValue").focus();
+ 			return;
+ 		}
  		location.href="/blockcom/boardlist?bf_cate_idx="+bf_cate_idx+"&searchCondition="+searchCondition+"&searchValue="+searchValue+"&page=1&perPageNumber=10&blockSize=5";
  	});
 });
